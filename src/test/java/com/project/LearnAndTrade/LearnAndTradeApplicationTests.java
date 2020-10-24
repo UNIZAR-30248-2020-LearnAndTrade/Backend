@@ -1,6 +1,6 @@
 package com.project.LearnAndTrade;
 
-import com.project.LearnAndTrade.Controlador.TestControlador;
+import com.project.LearnAndTrade.Controller.TestControlador;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

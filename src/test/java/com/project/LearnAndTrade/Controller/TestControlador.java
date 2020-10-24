@@ -1,4 +1,4 @@
-package com.project.LearnAndTrade.Controlador;
+package com.project.LearnAndTrade.Controller;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
