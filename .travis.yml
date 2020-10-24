@@ -21,3 +21,5 @@ cache:
 #  - ./gradlew clean build
 #  - ./gradlew jacocoTestReport
 #  - sonar-scanner
+before_install:
+  - chmod +x gradlew
