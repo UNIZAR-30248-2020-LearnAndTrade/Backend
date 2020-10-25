@@ -22,7 +22,7 @@ dependencies {
 
 	implementation 'io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.25'
 
-	runtimeOnly 'mysql:mysql-connector-java'
+	implementation 'org.postgresql:postgresql'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
