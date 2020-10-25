@@ -1,4 +1,0 @@
-com/project/LearnAndTrade/LearnAndTradeApplicationTests.java
- com.project.LearnAndTrade.LearnAndTradeApplicationTests
-com/project/LearnAndTrade/Controlador/TestControlador.java
- com.project.LearnAndTrade.Controlador.TestControlador

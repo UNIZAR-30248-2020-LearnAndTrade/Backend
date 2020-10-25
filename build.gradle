@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.project'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
@@ -21,6 +21,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
 	implementation 'io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.25'
+
+	runtimeOnly 'mysql:mysql-connector-java'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
