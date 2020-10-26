@@ -6,7 +6,7 @@
   This class represents the entity User
 
   @author Gonzalo Berné
- * @version 1.0, 25/10/2020
+  @version 1.0, 25/10/2020
  */
 
 package com.project.LearnAndTrade.Entity;

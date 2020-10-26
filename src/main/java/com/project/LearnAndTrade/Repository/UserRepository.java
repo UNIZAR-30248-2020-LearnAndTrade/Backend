@@ -16,4 +16,9 @@ import com.project.LearnAndTrade.Entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, String> {
+
+    boolean existsByEmailAndPassword(String email, String password);
+
+    boolean existsByUsernameAndPassword(String username, String password);
+
 }
