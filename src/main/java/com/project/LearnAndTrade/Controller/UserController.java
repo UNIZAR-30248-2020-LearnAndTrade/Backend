@@ -32,7 +32,7 @@ public class UserController {
     @Autowired
     private GetUserData getUserData;
 
-    @GetMapping(path = "/logIn")
+    @GetMapping(path = "/login")
     public ResponseEntity<Object> logIn(String name, String password) {
         if (logInUser.logIn(name, password)) {
             return ResponseEntity.status(HttpStatus.OK).body("Log In Correcto");

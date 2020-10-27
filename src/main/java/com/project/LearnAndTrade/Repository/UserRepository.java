@@ -15,7 +15,6 @@ package com.project.LearnAndTrade.Repository;
 
 import com.project.LearnAndTrade.Entity.User;
 import org.springframework.data.repository.CrudRepository;
-import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, String> {
 
