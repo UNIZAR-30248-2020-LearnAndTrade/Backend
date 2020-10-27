@@ -6,17 +6,21 @@
   This class represents the entity User
 
   @author Gonzalo Berné
-  @version 1.0, 25/10/2020
+  @author Eduardo Gimeno
+  @version 2.0, 27/10/2020
  */
 
 package com.project.LearnAndTrade.Entity;
 
 import lombok.Getter;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "User_T")
@@ -34,5 +38,22 @@ public class User {
     @NotNull
     @Getter
     private String password;
+
+    @NotNull
+    @ElementCollection
+    @Getter
+    private List<String> interests;
+
+    @NotNull
+    @Getter
+    private String name;
+
+    @NotNull
+    @Getter
+    private String surname;
+
+    @NotNull
+    @Getter
+    private Date birthDate;
 
 }
