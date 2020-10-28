@@ -21,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET})
 @RequestMapping(path = "/user")
@@ -34,14 +36,15 @@ public class UserController {
 
     @GetMapping(path = "/login")
     public ResponseEntity<Object> logIn(String name, String password) {
-        if (logInUser.logIn(name, password)) {
-            return ResponseEntity.status(HttpStatus.OK).body("Log In Correcto");
+        Optional<User> userOptional = logInUser.logIn(name, password);
+        if (userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(userOptional.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Log In Incorrecto");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
         }
     }
 
-    @GetMapping(path = "/getUser")
+    @GetMapping(path = "/getuser")
     public ResponseEntity<Object> getUser(String username) {
         if (getUserData.exists(username)) {
             User user = getUserData.getUser(username);

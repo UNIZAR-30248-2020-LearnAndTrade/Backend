@@ -16,11 +16,13 @@ package com.project.LearnAndTrade.Repository;
 import com.project.LearnAndTrade.Entity.User;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 public interface UserRepository extends CrudRepository<User, String> {
 
-    boolean existsByEmailAndPassword(String email, String password);
+    Optional<User> findByEmailAndPassword(String email, String password);
 
-    boolean existsByUsernameAndPassword(String username, String password);
+    Optional<User> findByUsernameAndPassword(String username, String password);
 
     boolean existsByUsername(String username);
 
