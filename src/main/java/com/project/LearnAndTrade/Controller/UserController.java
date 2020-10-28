@@ -46,11 +46,11 @@ public class UserController {
 
     @GetMapping(path = "/getuser")
     public ResponseEntity<Object> getUser(String username) {
-        if (getUserData.exists(username)) {
-            User user = getUserData.getUser(username);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
+        Optional<User> userOptional = getUserData.getUser(username);
+        if (userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(userOptional.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no existente");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
         }
     }
 

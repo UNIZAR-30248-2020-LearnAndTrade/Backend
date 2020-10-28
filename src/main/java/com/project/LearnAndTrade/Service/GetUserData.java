@@ -16,17 +16,15 @@ import com.project.LearnAndTrade.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GetUserData {
 
     @Autowired
     private UserRepository userRepository;
 
-    public Boolean exists(String username) {
-        return userRepository.existsByUsername(username);
-    }
-
-    public User getUser(String username) {
+    public Optional<User> getUser(String username) {
         return userRepository.findByUsername(username);
     }
 
