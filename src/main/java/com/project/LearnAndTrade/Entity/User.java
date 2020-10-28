@@ -45,6 +45,11 @@ public class User {
     private List<String> interests;
 
     @NotNull
+    @ElementCollection
+    @Getter
+    private List<String> knowledge;
+
+    @NotNull
     @Getter
     private String name;
 
