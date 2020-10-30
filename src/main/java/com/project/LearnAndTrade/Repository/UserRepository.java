@@ -14,8 +14,10 @@
 package com.project.LearnAndTrade.Repository;
 
 import com.project.LearnAndTrade.Entity.User;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, String> {
@@ -25,5 +27,8 @@ public interface UserRepository extends CrudRepository<User, String> {
     Optional<User> findByUsernameAndPassword(String username, String password);
 
     Optional<User> findByUsername(String username);
+
+    @Query(value = "SELECT u FROM User u JOIN u.interests i JOIN u.knowledges k WHERE k IN ?1 AND i IN ?2")
+    List<User> findComplementaryUsers(List<String> interests, List<String> knowledges);
 
 }

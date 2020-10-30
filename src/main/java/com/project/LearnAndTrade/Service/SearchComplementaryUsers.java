@@ -16,20 +16,16 @@ import com.project.LearnAndTrade.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class LogInUser {
+public class SearchComplementaryUsers {
 
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<User> logIn(String name, String password) {
-        Optional<User> userOptional = userRepository.findByEmailAndPassword(name, password);
-        if (!userOptional.isPresent()) {
-            userOptional = userRepository.findByUsernameAndPassword(name, password);
-        }
-        return userOptional;
+    public List<User> searchUsers(User user) {
+        return userRepository.findComplementaryUsers(user.getInterests(), user.getKnowledges());
     }
 }

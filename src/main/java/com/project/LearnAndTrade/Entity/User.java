@@ -13,12 +13,10 @@
 package com.project.LearnAndTrade.Entity;
 
 import lombok.Getter;
-import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -42,13 +40,15 @@ public class User {
 
     @NotNull
     @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     @Getter
     private List<String> interests;
 
     @NotNull
     @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     @Getter
-    private List<String> knowledge;
+    private List<String> knowledges;
 
     @NotNull
     @Getter
@@ -61,5 +61,9 @@ public class User {
     @NotNull
     @Getter
     private Date birthDate;
+
+    public List<String> getInterestsU (){
+        return interests;
+    }
 
 }

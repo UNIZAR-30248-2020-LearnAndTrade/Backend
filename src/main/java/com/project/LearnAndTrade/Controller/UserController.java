@@ -15,6 +15,7 @@ package com.project.LearnAndTrade.Controller;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.GetUserData;
 import com.project.LearnAndTrade.Service.LogInUser;
+import com.project.LearnAndTrade.Service.SearchComplementaryUsers;
 import com.project.LearnAndTrade.Service.UpdateUserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,9 @@ public class UserController {
 
     @Autowired
     private UpdateUserData updateUserData;
+
+    @Autowired
+    private SearchComplementaryUsers searchComplementaryUsers;
 
     @GetMapping(path = "/login")
     public ResponseEntity<Object> logIn(String name, String password) {
@@ -67,6 +71,11 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
         }
+    }
+
+    @GetMapping(path = "/getcomplementaryusers")
+    public ResponseEntity<Object> searchComplementaryUsers(@RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(searchComplementaryUsers.searchUsers(user));
     }
 
 }
