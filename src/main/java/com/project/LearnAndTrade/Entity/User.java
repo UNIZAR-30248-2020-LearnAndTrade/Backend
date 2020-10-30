@@ -13,6 +13,7 @@
 package com.project.LearnAndTrade.Entity;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -42,11 +43,13 @@ public class User {
     @NotNull
     @ElementCollection
     @Getter
+    @Setter
     private List<String> interests;
 
     @NotNull
     @ElementCollection
     @Getter
+    @Setter
     private List<String> knowledge;
 
     @NotNull

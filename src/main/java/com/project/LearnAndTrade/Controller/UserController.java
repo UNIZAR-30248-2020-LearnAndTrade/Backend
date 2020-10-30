@@ -15,12 +15,14 @@ package com.project.LearnAndTrade.Controller;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.GetUserData;
 import com.project.LearnAndTrade.Service.LogInUser;
+import com.project.LearnAndTrade.Service.UpdateUserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -33,6 +35,9 @@ public class UserController {
 
     @Autowired
     private GetUserData getUserData;
+
+    @Autowired
+    private UpdateUserData updateUserData;
 
     @GetMapping(path = "/login")
     public ResponseEntity<Object> logIn(String name, String password) {
@@ -51,6 +56,16 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(userOptional.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+        }
+    }
+
+    @PostMapping(path = "/updateuser")
+    public ResponseEntity<Object> updateInterests(@RequestBody User user) {
+        String result = updateUserData.updateUser(user);
+        if (result.equals("OK")) {
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
         }
     }
 
