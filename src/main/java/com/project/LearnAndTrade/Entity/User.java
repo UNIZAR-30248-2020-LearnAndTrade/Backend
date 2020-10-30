@@ -43,13 +43,11 @@ public class User {
     @NotNull
     @ElementCollection
     @Getter
-    @Setter
     private List<String> interests;
 
     @NotNull
     @ElementCollection
     @Getter
-    @Setter
     private List<String> knowledge;
 
     @NotNull
