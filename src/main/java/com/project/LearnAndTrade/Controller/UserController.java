@@ -65,11 +65,11 @@ public class UserController {
 
     @PostMapping(path = "/updateuser")
     public ResponseEntity<Object> updateInterests(@RequestBody User user) {
-        String result = updateUserData.updateUser(user);
-        if (result.equals("OK")) {
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+        try {
+            User updatedUser = updateUserData.updateUser(user);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 

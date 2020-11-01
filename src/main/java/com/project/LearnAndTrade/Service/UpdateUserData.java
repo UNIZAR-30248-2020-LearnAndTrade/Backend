@@ -13,13 +13,8 @@ public class UpdateUserData {
     @Autowired
     private UserRepository userRepository;
 
-    public String updateUser(User user) {
-        try {
-            userRepository.save(user);
-            return "OK";
-        } catch (IllegalArgumentException e) {
-            return e.getMessage();
-        }
+    public User updateUser(User user) throws IllegalArgumentException {
+        return userRepository.save(user);
     }
 
 }
