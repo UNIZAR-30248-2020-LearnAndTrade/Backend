@@ -62,8 +62,4 @@ public class User {
     @Getter
     private Date birthDate;
 
-    public List<String> getInterestsU (){
-        return interests;
-    }
-
 }

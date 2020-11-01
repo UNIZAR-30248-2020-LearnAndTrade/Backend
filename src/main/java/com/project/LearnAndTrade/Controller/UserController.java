@@ -7,7 +7,7 @@
 
   @author Gonzalo Berné
   @author Eduardo Gimeno
-  @version 2.0, 27/10/2020
+  @version 4.0, 30/10/2020
  */
 
 package com.project.LearnAndTrade.Controller;
