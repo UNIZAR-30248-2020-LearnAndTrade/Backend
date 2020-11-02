@@ -12,7 +12,9 @@
 
 package com.project.LearnAndTrade.Entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -23,6 +25,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "User_T")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
