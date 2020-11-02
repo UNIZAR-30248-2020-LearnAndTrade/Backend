@@ -31,7 +31,7 @@ public interface UserRepository extends CrudRepository<User, String> {
     Optional<User> findByUsername(String username);
 
     // This query find complementary users through one list of interests and other of knowledges
-    @Query(value = "SELECT u FROM User u JOIN u.interests i JOIN u.knowledges k WHERE k IN ?1 AND i IN ?2")
+    @Query(value = "SELECT DISTINCT u FROM User u JOIN u.interests i JOIN u.knowledges k WHERE k IN ?1 AND i IN ?2")
     List<User> findComplementaryUsers(List<String> interests, List<String> knowledges);
 
 }

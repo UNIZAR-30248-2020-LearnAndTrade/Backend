@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET})
@@ -82,7 +83,10 @@ public class UserController {
     public ResponseEntity<Object> searchComplementaryUsers(String username) {
         Optional<User> userOptional = getUserData.getUser(username);
         if (userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(searchComplementaryUsers.searchUsers(userOptional.get()));
+            return ResponseEntity.status(HttpStatus.OK).body(searchComplementaryUsers.searchUsers(userOptional.get())
+                    .stream()
+                    .map(parserUserDTO::userToUserDTO)
+                    .collect(Collectors.toList()));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
         }
