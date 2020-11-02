@@ -79,8 +79,8 @@ public class UserController {
     }
 
     @GetMapping(path = "/getcomplementaryusers")
-    public ResponseEntity<Object> searchComplementaryUsers(@RequestBody UserDTO userDTO) {
-        Optional<User> userOptional = parserUserDTO.userDTOToUser(userDTO);
+    public ResponseEntity<Object> searchComplementaryUsers(String username) {
+        Optional<User> userOptional = getUserData.getUser(username);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(searchComplementaryUsers.searchUsers(userOptional.get()));
         } else {
