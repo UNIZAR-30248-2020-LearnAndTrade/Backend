@@ -19,6 +19,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
