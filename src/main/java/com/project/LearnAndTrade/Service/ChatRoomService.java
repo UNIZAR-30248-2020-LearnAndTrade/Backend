@@ -1,3 +1,14 @@
+/*
+ * ChatRoomService.java 1.0 2/11/2020
+ */
+
+/*
+  This file has all the services referred to the chat rooms (ChatRoom entity).
+
+  @author Gonzalo Berné
+  @version 1.0, 2/11/2020
+ */
+
 package com.project.LearnAndTrade.Service;
 
 import com.project.LearnAndTrade.Entity.ChatRoom;
@@ -10,10 +21,14 @@ import java.util.Optional;
 @Service
 public class ChatRoomService {
 
-    @Autowired private ChatRoomRepository chatRoomRepository;
+    @Autowired
+    private ChatRoomRepository chatRoomRepository;
 
-    public Optional<String> getChatId(
-            String senderId, String recipientId, boolean createIfNotExist) {
+    /*
+        This service get the "chatId" of its ChatRoom by a "senderId", a "recipientId"
+            and a boolean which creates the room if this does not exist.
+     */
+    public Optional<String> getChatId(String senderId, String recipientId, boolean createIfNotExist) {
 
         Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
         if (chatRoomOptional.isPresent()) {
