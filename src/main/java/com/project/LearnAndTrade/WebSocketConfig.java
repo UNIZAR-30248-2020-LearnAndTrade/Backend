@@ -1,3 +1,14 @@
+/*
+ * WebSocketConfig.java 1.0 2/11/2020
+ */
+
+/*
+  This file creates the configuration for the web socket connection used in the chat
+
+  @author Gonzalo Berné
+  @version 1.0, 2/11/2020
+ */
+
 package com.project.LearnAndTrade;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
