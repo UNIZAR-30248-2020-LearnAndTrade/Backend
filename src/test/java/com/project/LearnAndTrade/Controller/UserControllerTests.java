@@ -5,13 +5,13 @@ import com.project.LearnAndTrade.Service.GetUserData;
 import com.project.LearnAndTrade.Service.LogInUser;
 import com.project.LearnAndTrade.Service.SearchComplementaryUsers;
 import com.project.LearnAndTrade.Service.UpdateUserData;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(SpringRunner.class)
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
 public class UserControllerTests {
@@ -59,10 +60,22 @@ public class UserControllerTests {
         cantGetComplementaryUsers();
     }
 
+    @BeforeAll
+    static void before() {
+        System.out.println("Starting 'UserController' testing...");
+    }
+
+    @AfterAll
+    static void after() {
+        System.out.println("Finished 'UserController' testing...");
+    }
+
     @Test
     @Order(1)
     public void canCreateUser() {
-        // TODO: Test 'canCreateUser' not implemented yet
+        User result = updateUserDataService.updateUser(user);
+        assertNotNull(result);
+        System.out.println("1. 'canCreateUser' test passed");
     }
 
     @Test
@@ -92,7 +105,7 @@ public class UserControllerTests {
     @Test
     @Order(5)
     public void cantGetUser() {
-        Optional<User> result = getUserDataService.getUser(user.getUsername());
+        Optional<User> result = getUserDataService.getUser(user.getUsername() + "2");
         assertFalse(result.isPresent());
         System.out.println("5. 'cantGetUser' test passed");
     }
@@ -100,7 +113,7 @@ public class UserControllerTests {
     @Test
     @Order(6)
     public void canUpdateUser() {
-        User newUser = new User(user.getUsername() + "2", user.getEmail(), user.getPassword() + "2", user.getInterests(), user.getKnowledges(),
+        User newUser = new User(user.getUsername(), "emailUserTest2@learnandtrade.com", user.getPassword() + "2", user.getInterests(), user.getKnowledges(),
                 user.getName() + "2", user.getSurname() + "2", new Date());
         User result = updateUserDataService.updateUser(newUser);
         assertNotNull(result);
@@ -117,11 +130,8 @@ public class UserControllerTests {
     @Test
     @Order(7)
     public void cantUpdateUser() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            User newUser = new User(user.getUsername() + "2", user.getEmail(), user.getPassword() + "2", user.getInterests(), user.getKnowledges(),
-                    user.getName() + "2", user.getSurname() + "2", new Date());
-            User result = updateUserDataService.updateUser(newUser);
-            assertNull(result);
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            User result = updateUserDataService.updateUser(null);
         });
         System.out.println("7. 'cantUpdateUser' test passed");
     }

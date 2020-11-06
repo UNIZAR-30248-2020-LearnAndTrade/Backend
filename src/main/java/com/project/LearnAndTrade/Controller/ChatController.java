@@ -64,6 +64,7 @@ public class ChatController {
                         saved.getSenderId(),
                         saved.getSenderName()));
     }
+
     /*
             This method counts the messages without read in a chat by a "senderId" and a "recipientId".
      */
