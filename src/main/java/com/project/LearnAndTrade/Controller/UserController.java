@@ -15,6 +15,13 @@ package com.project.LearnAndTrade.Controller;
 import com.project.LearnAndTrade.DTO.UserDTO;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.graalvm.compiler.word.Word;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +51,11 @@ public class UserController {
     @Autowired
     private ParserUserDTO parserUserDTO;
 
+    @Operation(summary = "Perform login action for registered users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))))
+    })
     @GetMapping(path = "/login")
     public ResponseEntity<Object> logIn(String name, String password) {
         Optional<User> userOptional = logInUser.logIn(name, password);
