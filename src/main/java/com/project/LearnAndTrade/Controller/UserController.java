@@ -7,6 +7,7 @@
 
   @author Gonzalo Berné
   @author Eduardo Gimeno
+  @author Jorge Turbica
   @version 4.0, 30/10/2020
  */
 
@@ -16,12 +17,12 @@ import com.project.LearnAndTrade.DTO.UserDTO;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.graalvm.compiler.word.Word;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,14 +52,25 @@ public class UserController {
     @Autowired
     private ParserUserDTO parserUserDTO;
 
-    @Operation(summary = "Perform login action for registered users")
+    @Operation(summary = "Perform login action for registered users", tags = { "User" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful operation",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))))
+            @ApiResponse(responseCode = "200", description = "Successful login",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserDTO.class)
+                    )
+            ),
+            @ApiResponse(responseCode = "404", description = "Error login",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "")
+                    )
+            ),
     })
     @GetMapping(path = "/login")
-    public ResponseEntity<Object> logIn(String name, String password) {
-        Optional<User> userOptional = logInUser.logIn(name, password);
+    public ResponseEntity<Object> logIn (
+            @Parameter(description = "The user's username", required = true) String username,
+            @Parameter(description = "The user's password", required = true) String password
+    ) {
+        Optional<User> userOptional = logInUser.logIn(username, password);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(userOptional.get()));
         } else {
@@ -67,7 +79,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/getuser")
-    public ResponseEntity<Object> getUser(String username) {
+    public ResponseEntity<Object> getUser (String username) {
         Optional<User> userOptional = getUserData.getUser(username);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(userOptional.get()));
@@ -77,7 +89,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/updateuser")
-    public ResponseEntity<Object> updateInterests(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> updateInterests (@RequestBody UserDTO userDTO) {
         try {
             Optional<User> userOptional = parserUserDTO.userDTOToUser(userDTO);
             if (userOptional.isPresent()) {
@@ -92,7 +104,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/getcomplementaryusers")
-    public ResponseEntity<Object> searchComplementaryUsers(String username) {
+    public ResponseEntity<Object> searchComplementaryUsers (String username) {
         Optional<User> userOptional = getUserData.getUser(username);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(searchComplementaryUsers.searchUsers(userOptional.get())

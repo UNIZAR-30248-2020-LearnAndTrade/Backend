@@ -3,7 +3,7 @@
  */
 
 /*
-  This file creates the configuration for the web connection fot the CORS problems
+  This file creates the configuration for the web connection for the CORS problems
 
   @author Gonzalo Berné
   @version 1.0, 2/11/2020

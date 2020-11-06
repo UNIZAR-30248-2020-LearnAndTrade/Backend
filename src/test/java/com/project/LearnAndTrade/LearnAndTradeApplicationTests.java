@@ -11,10 +11,10 @@ import org.junit.runners.Suite;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
-@SpringBootTest
+//@SpringBootTest
 class LearnAndTradeApplicationTests {
 
-    @Test
+    //@Test
     void main() {
         System.out.println("Preparing environment for testing...");
         Result result = JUnitCore.runClasses(TestSuite.class);
