@@ -11,33 +11,69 @@
 
 package com.project.LearnAndTrade.DTO;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
 import java.util.Date;
 import java.util.List;
 
+@ApiModel
+@Getter
 @AllArgsConstructor
 public class UserDTO {
 
-    @Getter
+    @Schema(
+            description = "Username of the user",
+            example = "jorge",
+            required = true
+    )
     private String username;
 
-    @Getter
+    @Schema(
+            description = "Email of the user",
+            example = "jorge@gmail.com",
+            required = true
+    )
     private String email;
 
-    @Getter
+    @Schema(
+            description = "Interests of the user",
+            example = "[\"Baile\", \"Piano\"]",
+            type = "List",
+            required = true
+    )
     private List<String> interests;
 
-    @Getter
+    @Schema(
+            description = "Interests of the user",
+            example = "[\"Programación\", \"Violín\"]",
+            type = "List",
+            required = true
+    )
     private List<String> knowledges;
 
-    @Getter
+    @Schema(
+            description = "Name of the user",
+            example = "Jorge",
+            required = true
+    )
     private String name;
 
-    @Getter
+    @Schema(
+            description = "Surname of the user",
+            example = "Turbica",
+            required = true
+    )
     private String surname;
 
-    @Getter
+    @Schema(
+            description = "Birthdate of the user",
+            example = "05/06/1197",
+            type = "Date",
+            required = true
+    )
     private Date birthDate;
 
 }

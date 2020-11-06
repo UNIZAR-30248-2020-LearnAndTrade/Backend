@@ -78,6 +78,19 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Get user by it's username", tags = { "User" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully gotten user",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserDTO.class)
+                    )
+            ),
+            @ApiResponse(responseCode = "404", description = "Error login",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "")
+                    )
+            ),
+    })
     @GetMapping(path = "/getuser")
     public ResponseEntity<Object> getUser (String username) {
         Optional<User> userOptional = getUserData.getUser(username);
@@ -88,6 +101,21 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Update user", tags = { "User" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful user update",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserDTO.class)
+                    )
+            ),
+            @ApiResponse(responseCode = "404", description = "Error login",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "")
+                    )
+            ),
+            @ApiResponse(responseCode = "500", description = "Bad argument passed"
+            ),
+    })
     @PostMapping(path = "/updateuser")
     public ResponseEntity<Object> updateInterests (@RequestBody UserDTO userDTO) {
         try {
@@ -103,6 +131,19 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Search complementary users from the user passed", tags = { "User" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful complementary users search",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserDTO.class, type = "List")
+                    )
+            ),
+            @ApiResponse(responseCode = "404", description = "Error login",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "")
+                    )
+            ),
+    })
     @GetMapping(path = "/getcomplementaryusers")
     public ResponseEntity<Object> searchComplementaryUsers (String username) {
         Optional<User> userOptional = getUserData.getUser(username);
