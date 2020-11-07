@@ -28,11 +28,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
+@ApiIgnore
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET})
 @RequestMapping(path = "/user")
 public class UserController {
@@ -52,19 +54,20 @@ public class UserController {
     @Autowired
     private ParserUserDTO parserUserDTO;
 
-    @Operation(summary = "Perform login action for registered users", tags = { "User" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful login",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserDTO.class, type = "object")
-                    )
-            ),
-            @ApiResponse(responseCode = "404", description = "Error login",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "")
-                    )
-            ),
-    })
+    @Operation(summary = "Perform login action for registered users",
+            tags = { "User" },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful login",
+                            content = @Content(//mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDTO.class, type = "object")
+                            )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "Error login",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(example = "")
+                            )
+                    ),
+            })
     @GetMapping(path = "/login")
     public ResponseEntity<Object> logIn (
             @Parameter(description = "The user's username", required = true) String username,
