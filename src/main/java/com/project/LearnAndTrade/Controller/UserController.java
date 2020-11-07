@@ -16,8 +16,6 @@ package com.project.LearnAndTrade.Controller;
 import com.project.LearnAndTrade.DTO.UserDTO;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,13 +27,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
-@Api(hidden = true)
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET})
 @RequestMapping(path = "/user")
 public class UserController {
@@ -56,12 +52,14 @@ public class UserController {
     private ParserUserDTO parserUserDTO;
 
     @Operation(summary = "Perform login action for registered users",
-            tags = { "User" },
+            tags = {"User"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful login",
-                            content = @Content(//mediaType = "application/json",
-                                    schema = @Schema(implementation = UserDTO.class, type = "object")
-                            )
+                            content = {
+                                    @Content(mediaType = "application/json",
+                                            schema = @Schema(implementation = UserDTO.class)
+                                    )
+                            }
                     ),
                     @ApiResponse(responseCode = "404", description = "Error login",
                             content = @Content(mediaType = "application/json",
@@ -70,7 +68,7 @@ public class UserController {
                     ),
             })
     @GetMapping(path = "/login")
-    public ResponseEntity<Object> logIn (
+    public ResponseEntity<Object> logIn(
             @Parameter(description = "The user's username", required = true) String username,
             @Parameter(description = "The user's password", required = true) String password
     ) {
@@ -82,7 +80,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Get user by it's username", tags = { "User" })
+    @Operation(summary = "Get user by it's username", tags = {"User"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully gotten user",
                     content = @Content(mediaType = "application/json",
@@ -96,7 +94,7 @@ public class UserController {
             ),
     })
     @GetMapping(path = "/getuser")
-    public ResponseEntity<Object> getUser (String username) {
+    public ResponseEntity<Object> getUser(String username) {
         Optional<User> userOptional = getUserData.getUser(username);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(userOptional.get()));
@@ -105,7 +103,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Update user", tags = { "User" })
+    @Operation(summary = "Update user", tags = {"User"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful user update",
                     content = @Content(mediaType = "application/json",
@@ -121,7 +119,7 @@ public class UserController {
             ),
     })
     @PostMapping(path = "/updateuser")
-    public ResponseEntity<Object> updateInterests (@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> updateInterests(@RequestBody UserDTO userDTO) {
         try {
             Optional<User> userOptional = parserUserDTO.userDTOToUser(userDTO);
             if (userOptional.isPresent()) {
@@ -135,7 +133,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Search complementary users from the user passed", tags = { "User" })
+    @Operation(summary = "Search complementary users from the user passed", tags = {"User"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful complementary users search",
                     content = @Content(mediaType = "application/json",
@@ -149,7 +147,7 @@ public class UserController {
             ),
     })
     @GetMapping(path = "/getcomplementaryusers")
-    public ResponseEntity<Object> searchComplementaryUsers (String username) {
+    public ResponseEntity<Object> searchComplementaryUsers(String username) {
         Optional<User> userOptional = getUserData.getUser(username);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(searchComplementaryUsers.searchUsers(userOptional.get())
