@@ -16,6 +16,7 @@ package com.project.LearnAndTrade.Controller;
 import com.project.LearnAndTrade.DTO.UserDTO;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.*;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +33,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
+@Api(tags = "User")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET})
 @RequestMapping(path = "/user")
 public class UserController {
