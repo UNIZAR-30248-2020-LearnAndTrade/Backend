@@ -16,9 +16,9 @@ package com.project.LearnAndTrade.Controller;
 import com.project.LearnAndTrade.DTO.UserDTO;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.*;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -56,7 +56,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful login",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserDTO.class)
+                            schema = @Schema(implementation = UserDTO.class, type = "object")
                     )
             ),
             @ApiResponse(responseCode = "404", description = "Error login",
