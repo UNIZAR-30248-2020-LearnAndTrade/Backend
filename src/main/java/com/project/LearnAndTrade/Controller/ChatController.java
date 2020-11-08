@@ -104,7 +104,7 @@ public class ChatController {
             This method gets the messages in a chat by a "senderId" and a "recipientId".
      */
     @Operation(
-            summary = "This method gets the messages in a chat by a \"senderId\" and a \"recipientId\"",
+            summary = "This method gets the messages in a chat",
             description = "This method gets the messages in a chat by a \"senderId\" and a \"recipientId\"",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful messages reading"),
@@ -122,8 +122,8 @@ public class ChatController {
             This method gets one message by its "id".
      */
     @Operation(
-            summary = "This method gets the messages in a chat by a \"senderId\" and a \"recipientId\"",
-            description = "This method gets the messages in a chat by a \"senderId\" and a \"recipientId\"",
+            summary = "This method gets the message by it's ID",
+            description = "This method gets the message by it's ID",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful messages reading"),
                     @ApiResponse(responseCode = "404", description = "Error messages reading"),
