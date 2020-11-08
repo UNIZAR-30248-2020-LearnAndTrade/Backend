@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller
 @Api(tags = "User")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET})
 @RequestMapping(path = "/user")
@@ -58,7 +58,7 @@ public class UserController {
                     @ApiResponse(responseCode = "200", description = "Successful login",
                             content = {
                                     @Content(mediaType = "application/json",
-                                            schema = @Schema(implementation = UserDTO.class)
+                                            schema = @Schema(implementation = ResponseEntity.class)
                                     )
                             }
                     ),
