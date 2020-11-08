@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Controller
-@Api(tags = "Home", hidden = true)
+@Api(tags = "Home")
+@ApiIgnore
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET})
 @RequestMapping(path = "/")
 public class HomeController {

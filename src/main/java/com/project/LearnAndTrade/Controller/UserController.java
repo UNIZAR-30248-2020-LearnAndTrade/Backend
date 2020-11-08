@@ -55,18 +55,13 @@ public class UserController {
 
     @Operation(summary = "Perform login action for registered users",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful login",
+                    @ApiResponse(responseCode = "200",
+                            description = "Successful login",
                             content = {
-                                    @Content(mediaType = "application/json",
-                                            schema = @Schema(implementation = ResponseEntity.class)
-                                    )
+                                    @Content(schema = @Schema(ref = "#/components/schemas/UserDTO"))
                             }
                     ),
-                    @ApiResponse(responseCode = "404", description = "Error login",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(example = "")
-                            )
-                    ),
+                    @ApiResponse(responseCode = "404", description = "Error login"),
             })
     @GetMapping(path = "/login")
     public ResponseEntity<Object> logIn(
@@ -83,16 +78,8 @@ public class UserController {
 
     @Operation(summary = "Get user by it's username")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully gotten user",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserDTO.class)
-                    )
-            ),
-            @ApiResponse(responseCode = "404", description = "Error login",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "")
-                    )
-            ),
+            @ApiResponse(responseCode = "200", description = "Successfully gotten user"),
+            @ApiResponse(responseCode = "404", description = "Error login"),
     })
     @GetMapping(path = "/getuser")
     public ResponseEntity<Object> getUser(String username) {
@@ -106,18 +93,9 @@ public class UserController {
 
     @Operation(summary = "Update user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful user update",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserDTO.class)
-                    )
-            ),
-            @ApiResponse(responseCode = "404", description = "Error login",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "")
-                    )
-            ),
-            @ApiResponse(responseCode = "500", description = "Bad argument passed"
-            ),
+            @ApiResponse(responseCode = "200", description = "Successful user update"),
+            @ApiResponse(responseCode = "404", description = "Error login"),
+            @ApiResponse(responseCode = "500", description = "Bad argument passed"),
     })
     @PostMapping(path = "/updateuser")
     public ResponseEntity<Object> updateInterests(@RequestBody UserDTO userDTO) {
@@ -136,16 +114,8 @@ public class UserController {
 
     @Operation(summary = "Search complementary users from the user passed")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful complementary users search",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserDTO.class, type = "List")
-                    )
-            ),
-            @ApiResponse(responseCode = "404", description = "Error login",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "")
-                    )
-            ),
+            @ApiResponse(responseCode = "200", description = "Successful complementary users search"),
+            @ApiResponse(responseCode = "404", description = "Error login"),
     })
     @GetMapping(path = "/getcomplementaryusers")
     public ResponseEntity<Object> searchComplementaryUsers(String username) {
