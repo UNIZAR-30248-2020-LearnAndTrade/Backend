@@ -49,7 +49,7 @@ public class UserDTO {
             description = "Interests of the user",
             example = "[\"Programación\", \"Violín\"]",
             type = "array",
-            required = true,
+            required = true
     )
     private List<String> knowledges;
 

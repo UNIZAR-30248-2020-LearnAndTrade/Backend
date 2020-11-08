@@ -36,7 +36,7 @@ public class User {
     @NotNull
     @Getter
     private String username;
-    
+
     @NotNull
     @Getter
     private String email;

@@ -58,7 +58,7 @@ public class ChatController {
 
         // The message is sent to the recipient user.
         messagingTemplate.convertAndSendToUser(
-                chatMessage.getRecipientId(),"/queue/messages",
+                chatMessage.getRecipientId(), "/queue/messages",
                 new ChatNotification(
                         saved.getId(),
                         saved.getSenderId(),
@@ -81,8 +81,8 @@ public class ChatController {
             This method gets the messages in a chat by a "senderId" and a "recipientId".
      */
     @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<?> findChatMessages ( @PathVariable String senderId,
-                                                @PathVariable String recipientId) {
+    public ResponseEntity<?> findChatMessages(@PathVariable String senderId,
+                                              @PathVariable String recipientId) {
         return ResponseEntity
                 .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }
@@ -91,7 +91,7 @@ public class ChatController {
             This method gets one message by its "id".
      */
     @GetMapping("/messages/{id}")
-    public ResponseEntity<?> findMessage ( @PathVariable String id) {
+    public ResponseEntity<?> findMessage(@PathVariable String id) {
         return ResponseEntity
                 .ok(chatMessageService.findById(id));
     }

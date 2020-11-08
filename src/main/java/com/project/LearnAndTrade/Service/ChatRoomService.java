@@ -34,8 +34,8 @@ public class ChatRoomService {
         if (chatRoomOptional.isPresent()) {
             return Optional.of(chatRoomOptional.get().getChatId());
         } else {
-            if(!createIfNotExist) {
-                return  Optional.empty();
+            if (!createIfNotExist) {
+                return Optional.empty();
             }
             String chatId = String.format("%s_%s", senderId, recipientId);
 

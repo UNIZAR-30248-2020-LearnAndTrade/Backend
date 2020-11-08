@@ -19,8 +19,6 @@ import com.project.LearnAndTrade.Service.*;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +54,7 @@ public class UserController {
     @Operation(
             summary = "Perform login action for registered users",
             responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Successful login",
-                            content = {
-                                    @Content(
-                                            mediaType = "application/json",
-                                            schema = @Schema(implementation = UserDTO.class)
-                                    )
-                            }
-                    ),
+                    @ApiResponse(responseCode = "200", description = "Successful login"),
                     @ApiResponse(responseCode = "404", description = "Error login"),
             })
     @GetMapping(path = "/login")
@@ -81,11 +70,12 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Get user by it's username")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully gotten user"),
-            @ApiResponse(responseCode = "404", description = "Error login"),
-    })
+    @Operation(
+            summary = "Get user by it's username",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully gotten user"),
+                    @ApiResponse(responseCode = "404", description = "Error login"),
+            })
     @GetMapping(path = "/getuser")
     public ResponseEntity<UserDTO> getUser(
             @Parameter(description = "The user's username", required = true) String username
