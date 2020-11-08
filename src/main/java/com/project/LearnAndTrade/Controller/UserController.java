@@ -54,18 +54,22 @@ public class UserController {
     @Autowired
     private ParserUserDTO parserUserDTO;
 
-    @Operation(summary = "Perform login action for registered users",
+    @Operation(
+            summary = "Perform login action for registered users",
             responses = {
-                    @ApiResponse(responseCode = "200",
+                    @ApiResponse(
+                            responseCode = "200",
                             description = "Successful login",
                             content = {
-                                    @Content(schema = @Schema(ref = "#/components/schemas/UserDTO"))
+                                    @Content(
+                                            mediaType = "application/json",
+                                            schema = @Schema(ref = "#/components/schemas/UserDTO"))
                             }, ref = "#/components/schemas/UserDTO"
                     ),
                     @ApiResponse(responseCode = "404", description = "Error login"),
             })
     @GetMapping(path = "/login")
-    public ResponseEntity<Object> logIn(
+    public ResponseEntity<UserDTO> logIn(
             @Parameter(description = "The user's username", required = true) String username,
             @Parameter(description = "The user's password", required = true) String password
     ) {
@@ -73,7 +77,7 @@ public class UserController {
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(userOptional.get()));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -83,12 +87,12 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Error login"),
     })
     @GetMapping(path = "/getuser")
-    public ResponseEntity<Object> getUser(String username) {
+    public ResponseEntity<UserDTO> getUser(String username) {
         Optional<User> userOptional = getUserData.getUser(username);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(userOptional.get()));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
