@@ -38,9 +38,9 @@ public class UserDTO {
     private String email;
 
     @Schema(
-            description = "Interests of the user",
+            name = "Interests of the user",
             example = "[\"Baile\", \"Piano\"]",
-            type = "List",
+            type = "array",
             required = true
     )
     private List<String> interests;
@@ -48,8 +48,8 @@ public class UserDTO {
     @Schema(
             description = "Interests of the user",
             example = "[\"Programación\", \"Violín\"]",
-            type = "List",
-            required = true
+            type = "array",
+            required = true,
     )
     private List<String> knowledges;
 
