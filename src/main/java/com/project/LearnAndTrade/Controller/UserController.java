@@ -20,7 +20,6 @@ import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,9 +66,10 @@ public class UserController {
     ) {
         Optional<User> userOptional = logInUser.logIn(username, password);
         if (userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(userOptional.get()));
+            //return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(userOptional.get()));
+            return ResponseEntity.ok().body(parserUserDTO.userToUserDTO(userOptional.get()));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -79,7 +79,7 @@ public class UserController {
                     @ApiResponse(responseCode = "200", description = "Successfully gotten user"),
                     @ApiResponse(responseCode = "404", description = "Error login"),
             })
-    @GetMapping(path = "/getuser")
+    @GetMapping(path = "/getuser", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getUser(
             @Parameter(description = "The user's username", required = true) String username
     ) {
@@ -91,14 +91,15 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Update user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful user update"),
-            @ApiResponse(responseCode = "201", description = "Successful user created"),
-            @ApiResponse(responseCode = "404", description = "Error login"),
-            @ApiResponse(responseCode = "500", description = "Bad argument passed"),
-    })
-    @PostMapping(path = "/updateuser")
+    @Operation(
+            summary = "Update user",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful user update"),
+                    @ApiResponse(responseCode = "201", description = "Successful user created"),
+                    @ApiResponse(responseCode = "404", description = "Error login"),
+                    @ApiResponse(responseCode = "500", description = "Bad argument passed"),
+            })
+    @PostMapping(path = "/updateuser", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> updateUser(
             @Parameter(description = "UserDTO object wanted to be saved", required = true) @RequestBody UserDTO userDTO) {
         try {
@@ -114,12 +115,13 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Search complementary users from the user passed")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful complementary users search"),
-            @ApiResponse(responseCode = "404", description = "Error login"),
-    })
-    @GetMapping(path = "/getcomplementaryusers")
+    @Operation(
+            summary = "Search complementary users from the user passed",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful complementary users search"),
+                    @ApiResponse(responseCode = "404", description = "Error login"),
+            })
+    @GetMapping(path = "/getcomplementaryusers", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDTO>> searchComplementaryUsers(
             @Parameter(description = "The user's username", required = true) String username
     ) {
