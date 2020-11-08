@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Reference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -63,8 +62,9 @@ public class UserController {
                             content = {
                                     @Content(
                                             mediaType = "application/json",
-                                            schema = @Schema(ref = "#/components/schemas/UserDTO"))
-                            }, ref = "#/components/schemas/UserDTO"
+                                            schema = @Schema(implementation = UserDTO.class)
+                                    )
+                            }
                     ),
                     @ApiResponse(responseCode = "404", description = "Error login"),
             })
@@ -87,7 +87,9 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Error login"),
     })
     @GetMapping(path = "/getuser")
-    public ResponseEntity<UserDTO> getUser(String username) {
+    public ResponseEntity<UserDTO> getUser(
+            @Parameter(description = "The user's username", required = true) String username
+    ) {
         Optional<User> userOptional = getUserData.getUser(username);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(userOptional.get()));
