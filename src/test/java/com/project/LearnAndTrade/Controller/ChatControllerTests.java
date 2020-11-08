@@ -5,15 +5,11 @@ import com.project.LearnAndTrade.Entity.MessageStatus;
 import com.project.LearnAndTrade.Exception.ResourceNotFoundException;
 import com.project.LearnAndTrade.Service.ChatMessageService;
 import com.project.LearnAndTrade.Service.ChatRoomService;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Ignore;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 import java.util.List;
@@ -21,7 +17,6 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
 public class ChatControllerTests {
@@ -36,14 +31,15 @@ public class ChatControllerTests {
 //    private final ChatMessage chatMessage2;
 
     public ChatControllerTests() {
-        chatMessage1 = new ChatMessage("", "", "chatTest1", "chatTest2", "testName1", "testName2", "Contenido del mensaje enviado", new Date(),
-                MessageStatus.DELIVERED);
+        chatMessage1 = new ChatMessage("chatMessage1", "testChat", "testUser1", "testUser2", "Test User 1",
+                "Test User 2", "Mensaje de prueba para el test", new Date(), MessageStatus.DELIVERED);
 //        chatMessage2 = new ChatMessage("", "", "chatTest1", "chatTest2", "testName1", "testName2", "Contenido del mensaje recibido", new Date(), MessageStatus.RECEIVED);
 
         chatRoomService = new ChatRoomService();
         chatMessageService = new ChatMessageService();
     }
 
+    @Disabled
     @Test
     @Order(1)
     public void canGetChat() {
@@ -96,12 +92,13 @@ public class ChatControllerTests {
         System.out.println("6. 'cantReadChat' test passed");
     }
 
+    @Disabled
     @Test
     @Order(7)
-    public void canFinMessage() {
+    public void canFindMessage() {
         ChatMessage result = chatMessageService.findById(chatMessage1.getId());
         assertNotNull(result);
-        System.out.println("7. 'canFinMessage' test passed");
+        System.out.println("7. 'canFindMessage' test passed");
     }
 
     @Test
