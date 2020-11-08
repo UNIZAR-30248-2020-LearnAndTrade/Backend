@@ -62,5 +62,17 @@ public class ChatControllerTests {
         System.out.println("2. 'cantGetChat' test passed");
     }
 
+    @Test
+    @Order(3)
+    public void canCountNewMessages() {
+        Optional<String> chatId = chatRoomService
+                .getChatId(null, null, false);
+        assertFalse(chatId.isPresent());
+        System.out.println("2. 'cantGetChat' test passed");
+    }
+
+
+
+
 
 }

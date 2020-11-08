@@ -54,7 +54,6 @@ public class UserController {
     private ParserUserDTO parserUserDTO;
 
     @Operation(summary = "Perform login action for registered users",
-            tags = {"User"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful login",
                             content = {
@@ -82,7 +81,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Get user by it's username", tags = {"User"})
+    @Operation(summary = "Get user by it's username")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully gotten user",
                     content = @Content(mediaType = "application/json",
@@ -105,7 +104,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Update user", tags = {"User"})
+    @Operation(summary = "Update user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful user update",
                     content = @Content(mediaType = "application/json",
@@ -135,7 +134,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Search complementary users from the user passed", tags = {"User"})
+    @Operation(summary = "Search complementary users from the user passed")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful complementary users search",
                     content = @Content(mediaType = "application/json",

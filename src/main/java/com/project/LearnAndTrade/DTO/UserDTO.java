@@ -11,7 +11,6 @@
 
 package com.project.LearnAndTrade.DTO;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +18,7 @@ import lombok.Getter;
 import java.util.Date;
 import java.util.List;
 
-@ApiModel
+@Schema(name = "UserDTO")
 @Getter
 @AllArgsConstructor
 public class UserDTO {
