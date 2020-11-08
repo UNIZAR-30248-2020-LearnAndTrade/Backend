@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Reference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -59,7 +60,7 @@ public class UserController {
                             description = "Successful login",
                             content = {
                                     @Content(schema = @Schema(ref = "#/components/schemas/UserDTO"))
-                            }
+                            }, ref = "#/components/schemas/UserDTO"
                     ),
                     @ApiResponse(responseCode = "404", description = "Error login"),
             })
