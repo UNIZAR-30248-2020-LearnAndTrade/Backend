@@ -21,7 +21,7 @@ public class SwaggerConfiguration {
                 .apis(RequestHandlerSelectors.basePackage("com.project.LearnAndTrade.Controller"))
                 .paths(PathSelectors.any())
                 .build()
-                .servers(new Server("Public API", "", "", new ArrayList<>(), new ArrayList<>()))
+                .servers(new Server("Public API", "https://learn-and-trade-backend.herokuapp.com:443", "", new ArrayList<>(), new ArrayList<>()))
                 .apiInfo(this.apiInfo());
     }
 
