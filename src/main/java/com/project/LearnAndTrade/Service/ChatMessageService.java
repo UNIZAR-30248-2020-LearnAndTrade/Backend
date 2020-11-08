@@ -66,7 +66,7 @@ public class ChatMessageService {
         List<ChatMessage> messages =
                 chatId.map(cId -> repository.findByChatId(cId)).orElse(new ArrayList<>());
 
-        if(messages.size() > 0) {
+        if (messages.size() > 0) {
             updateStatuses(senderId, recipientId, MessageStatus.DELIVERED);
         }
 

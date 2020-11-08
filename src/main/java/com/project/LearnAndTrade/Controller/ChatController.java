@@ -15,6 +15,10 @@ import com.project.LearnAndTrade.Entity.ChatMessage;
 import com.project.LearnAndTrade.Entity.ChatNotification;
 import com.project.LearnAndTrade.Service.ChatMessageService;
 import com.project.LearnAndTrade.Service.ChatRoomService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -26,7 +30,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @Controller
+@Api(tags = "Chat")
 public class ChatController {
 
     @Autowired
@@ -42,9 +49,18 @@ public class ChatController {
         This method receives a new ChatMessage.
         The message is saved in the database and it is sent to the other user.
      */
+    @Operation(
+            summary = "Save message in a chat",
+            description = "This method receives a new ChatMessage.\n" +
+                    "The message is saved in the database and it is sent to the other user",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success adding message"),
+                    @ApiResponse(responseCode = "404", description = "Error adding message"),
+            })
     @MessageMapping("/chat")
-    public void processMessage(@Payload ChatMessage chatMessage) {
-
+    public void processMessage(
+            @Parameter(description = "Chat message user wants to send", required = true) @Payload ChatMessage chatMessage
+    ) {
         /*
             By the "senderId" and the "recipientId" of the message,
             the ChatRoomService get the "chatId" of the ChatRoom which it belongs.
@@ -58,7 +74,7 @@ public class ChatController {
 
         // The message is sent to the recipient user.
         messagingTemplate.convertAndSendToUser(
-                chatMessage.getRecipientId(),"/queue/messages",
+                chatMessage.getRecipientId(), "/queue/messages",
                 new ChatNotification(
                         saved.getId(),
                         saved.getSenderId(),
@@ -68,11 +84,18 @@ public class ChatController {
     /*
             This method counts the messages without read in a chat by a "senderId" and a "recipientId".
      */
-    @GetMapping("/messages/{senderId}/{recipientId}/count")
+    @Operation(
+            summary = "Count non-read messages in a chat",
+            description = "This method counts the messages without read in a chat by a \"senderId\" and a \"recipientId\"",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful non-read message count"),
+                    @ApiResponse(responseCode = "404", description = "Error counting non-read messages"),
+            })
+    @GetMapping(path = "/messages/{senderId}/{recipientId}/count", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> countNewMessages(
-            @PathVariable String senderId,
-            @PathVariable String recipientId) {
-
+            @Parameter(description = "Sender ID", required = true) @PathVariable String senderId,
+            @Parameter(description = "Recipient ID", required = true) @PathVariable String recipientId
+    ) {
         return ResponseEntity
                 .ok(chatMessageService.countNewMessages(senderId, recipientId));
     }
@@ -80,9 +103,17 @@ public class ChatController {
     /*
             This method gets the messages in a chat by a "senderId" and a "recipientId".
      */
-    @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<?> findChatMessages ( @PathVariable String senderId,
-                                                @PathVariable String recipientId) {
+    @Operation(
+            summary = "This method gets the messages in a chat by a \"senderId\" and a \"recipientId\"",
+            description = "This method gets the messages in a chat by a \"senderId\" and a \"recipientId\"",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful messages reading"),
+                    @ApiResponse(responseCode = "404", description = "Error messages reading"),
+            })
+    @GetMapping(path = "/messages/{senderId}/{recipientId}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findChatMessages(
+            @Parameter(description = "Sender ID", required = true) @PathVariable String senderId,
+            @Parameter(description = "Recipient ID", required = true) @PathVariable String recipientId) {
         return ResponseEntity
                 .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }
@@ -90,8 +121,17 @@ public class ChatController {
     /*
             This method gets one message by its "id".
      */
-    @GetMapping("/messages/{id}")
-    public ResponseEntity<?> findMessage ( @PathVariable String id) {
+    @Operation(
+            summary = "This method gets the messages in a chat by a \"senderId\" and a \"recipientId\"",
+            description = "This method gets the messages in a chat by a \"senderId\" and a \"recipientId\"",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful messages reading"),
+                    @ApiResponse(responseCode = "404", description = "Error messages reading"),
+            })
+    @GetMapping(path = "/messages/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findMessage(
+            @Parameter(description = "Message ID", required = true) @PathVariable String id
+    ) {
         return ResponseEntity
                 .ok(chatMessageService.findById(id));
     }

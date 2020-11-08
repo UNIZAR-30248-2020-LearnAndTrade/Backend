@@ -11,7 +11,6 @@
 
 package com.project.LearnAndTrade.DTO;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +18,7 @@ import lombok.Getter;
 import java.util.Date;
 import java.util.List;
 
-@ApiModel
+@Schema(name = "UserDTO", type = "object")
 @Getter
 @AllArgsConstructor
 public class UserDTO {
@@ -41,7 +40,7 @@ public class UserDTO {
     @Schema(
             description = "Interests of the user",
             example = "[\"Baile\", \"Piano\"]",
-            type = "List",
+            type = "array",
             required = true
     )
     private List<String> interests;
@@ -49,7 +48,7 @@ public class UserDTO {
     @Schema(
             description = "Interests of the user",
             example = "[\"Programación\", \"Violín\"]",
-            type = "List",
+            type = "array",
             required = true
     )
     private List<String> knowledges;
