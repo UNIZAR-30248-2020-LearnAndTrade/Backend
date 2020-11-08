@@ -18,7 +18,7 @@ import lombok.Getter;
 import java.util.Date;
 import java.util.List;
 
-@Schema(name = "UserDTO")
+@Schema(name = "UserDTO", type = "object")
 @Getter
 @AllArgsConstructor
 public class UserDTO {
