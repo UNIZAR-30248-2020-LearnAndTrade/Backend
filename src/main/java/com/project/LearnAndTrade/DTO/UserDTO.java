@@ -38,7 +38,7 @@ public class UserDTO {
     private String email;
 
     @Schema(
-            name = "Interests of the user",
+            description = "Interests of the user",
             example = "[\"Baile\", \"Piano\"]",
             type = "array",
             required = true

@@ -11,6 +11,8 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.Date;
+
 @Configuration
 public class SwaggerConfiguration {
     @Bean
@@ -21,6 +23,7 @@ public class SwaggerConfiguration {
                 .paths(PathSelectors.any())
                 .build()
                 .additionalModels(new TypeResolver().resolve(UserDTO.class))
+                .directModelSubstitute(Date.class, String.class)
                 .apiInfo(this.apiInfo());
     }
 

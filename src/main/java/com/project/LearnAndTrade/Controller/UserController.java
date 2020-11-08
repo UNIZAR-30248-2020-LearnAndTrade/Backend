@@ -27,8 +27,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Controller
 @Api(tags = "User")
@@ -57,7 +60,7 @@ public class UserController {
                     @ApiResponse(responseCode = "200", description = "Successful login"),
                     @ApiResponse(responseCode = "404", description = "Error login"),
             })
-    @GetMapping(path = "/login")
+    @GetMapping(path = "/login", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> logIn(
             @Parameter(description = "The user's username", required = true) String username,
             @Parameter(description = "The user's password", required = true) String password
@@ -91,21 +94,23 @@ public class UserController {
     @Operation(summary = "Update user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful user update"),
+            @ApiResponse(responseCode = "201", description = "Successful user created"),
             @ApiResponse(responseCode = "404", description = "Error login"),
             @ApiResponse(responseCode = "500", description = "Bad argument passed"),
     })
     @PostMapping(path = "/updateuser")
-    public ResponseEntity<Object> updateInterests(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(
+            @Parameter(description = "UserDTO object wanted to be saved", required = true) @RequestBody UserDTO userDTO) {
         try {
             Optional<User> userOptional = parserUserDTO.userDTOToUser(userDTO);
             if (userOptional.isPresent()) {
                 User updatedUser = updateUserData.updateUser(userOptional.get());
-                return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+                return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(updatedUser));
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -115,7 +120,9 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Error login"),
     })
     @GetMapping(path = "/getcomplementaryusers")
-    public ResponseEntity<Object> searchComplementaryUsers(String username) {
+    public ResponseEntity<List<UserDTO>> searchComplementaryUsers(
+            @Parameter(description = "The user's username", required = true) String username
+    ) {
         Optional<User> userOptional = getUserData.getUser(username);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(searchComplementaryUsers.searchUsers(userOptional.get())
@@ -123,7 +130,7 @@ public class UserController {
                     .map(parserUserDTO::userToUserDTO)
                     .collect(Collectors.toList()));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
