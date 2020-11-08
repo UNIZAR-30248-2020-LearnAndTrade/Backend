@@ -12,15 +12,15 @@
 package com.project.LearnAndTrade.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.List;
 
 @Schema(name = "UserDTO", type = "object")
-@ApiResponse(description = "UserDTO")
+@ResponseBody
 @Getter
 @AllArgsConstructor
 public class UserDTO {

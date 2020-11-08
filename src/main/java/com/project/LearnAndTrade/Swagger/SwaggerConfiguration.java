@@ -1,5 +1,7 @@
 package com.project.LearnAndTrade.Swagger;
 
+import com.fasterxml.classmate.TypeResolver;
+import com.project.LearnAndTrade.DTO.UserDTO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,7 +23,7 @@ public class SwaggerConfiguration {
                 .apis(RequestHandlerSelectors.basePackage("com.project.LearnAndTrade.Controller"))
                 .paths(PathSelectors.any())
                 .build()
-                .servers(new Server("Public API", "https://learn-and-trade-backend.herokuapp.com:443", "", new ArrayList<>(), new ArrayList<>()))
+                .additionalModels(new TypeResolver().resolve(UserDTO.class))
                 .apiInfo(this.apiInfo());
     }
 
