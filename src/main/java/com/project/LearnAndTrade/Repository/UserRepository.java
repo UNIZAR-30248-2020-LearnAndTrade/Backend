@@ -13,6 +13,7 @@
 
 package com.project.LearnAndTrade.Repository;
 
+import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -32,6 +33,6 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     // This query find complementary users through one list of interests and other of knowledges
     @Query(value = "SELECT DISTINCT u FROM User u JOIN u.interests i JOIN u.knowledges k WHERE k IN ?1 AND i IN ?2")
-    List<User> findComplementaryUsers(List<String> interests, List<String> knowledges);
+    List<User> findComplementaryUsers(List<Theme> interests, List<Theme> knowledges);
 
 }

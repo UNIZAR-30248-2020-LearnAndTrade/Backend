@@ -43,7 +43,7 @@ public class UserDTO {
             type = "array",
             required = true
     )
-    private List<String> interests;
+    private List<ThemeDTO> interests;
 
     @Schema(
             description = "Interests of the user",
@@ -51,7 +51,7 @@ public class UserDTO {
             type = "array",
             required = true
     )
-    private List<String> knowledges;
+    private List<ThemeDTO> knowledges;
 
     @Schema(
             description = "Name of the user",

@@ -49,13 +49,13 @@ public class User {
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
     @Getter
-    private List<String> interests;
+    private List<Theme> interests;
 
     @NotNull
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
     @Getter
-    private List<String> knowledges;
+    private List<Theme> knowledges;
 
     @NotNull
     @Getter
