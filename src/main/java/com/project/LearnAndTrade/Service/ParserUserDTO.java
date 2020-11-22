@@ -15,10 +15,10 @@ import com.project.LearnAndTrade.DTO.UserDTO;
 import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Repository.UserRepository;
-import com.project.LearnAndTrade.Service.ParserThemeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +47,17 @@ public class ParserUserDTO {
                         interests.get(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
                         userDTO.getBirthDate()));
             } else {
-                return Optional.empty();
+                if (userDTO.getInterests().isEmpty()) {
+                    return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
+                            new ArrayList<>(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
+                            userDTO.getBirthDate()));
+                } else if (userDTO.getKnowledges().isEmpty()) {
+                    return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
+                            interests.get(), new ArrayList<>(), userDTO.getName(), userDTO.getSurname(),
+                            userDTO.getBirthDate()));
+                } else {
+                    return Optional.empty();
+                }
             }
         } else {
             return Optional.empty();
