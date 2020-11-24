@@ -53,7 +53,7 @@ public class ParserThemeDTO {
         for (ThemeDTO themeDTO : themesDTO) {
             Optional<Theme> oldTheme = themeRepository.findByName(themeDTO.getName());
             if (oldTheme.isPresent()) {
-                themes.add(new Theme(themeDTO.getName()));
+                themes.add(oldTheme.get());
             }
         }
         if (themes.size() > 0) {
