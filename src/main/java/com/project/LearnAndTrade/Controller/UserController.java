@@ -103,12 +103,9 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUser(
             @Parameter(description = "UserDTO object wanted to be saved", required = true) @RequestBody UserDTO userDTO) {
         try {
-            System.out.println("1");
             Optional<User> userOptional = parserUserDTO.userDTOToUser(userDTO);
             if (userOptional.isPresent()) {
-                System.out.println("2");
                 User updatedUser = updateUserData.updateUser(userOptional.get());
-                System.out.println("3");
                 return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(updatedUser));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
