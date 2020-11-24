@@ -15,6 +15,7 @@ import com.project.LearnAndTrade.DTO.ThemeDTO;
 import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Service.GetThemes;
 import com.project.LearnAndTrade.Service.ParserThemeDTO;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import java.util.Optional;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Controller
+@Api(tags = "Theme")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @RequestMapping(path = "/theme")
 public class ThemeController {
