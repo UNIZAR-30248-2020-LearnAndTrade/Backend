@@ -15,6 +15,8 @@ import com.project.LearnAndTrade.DTO.ThemeDTO;
 import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Service.GetThemes;
 import com.project.LearnAndTrade.Service.ParserThemeDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,12 @@ public class ThemeController {
     @Autowired
     private ParserThemeDTO parserThemeDTO;
 
+    @Operation(
+            summary = "Get all themes in the application",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful theme search"),
+                    @ApiResponse(responseCode = "404", description = "Error fetching themes"),
+            })
     @GetMapping(path = "/getthemes", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ThemeDTO>> getThemes() {
         Optional<List<Theme>> themes = getThemes.getAllThemes();

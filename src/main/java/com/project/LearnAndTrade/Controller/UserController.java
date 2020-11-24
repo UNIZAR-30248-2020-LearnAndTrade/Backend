@@ -119,7 +119,7 @@ public class UserController {
             summary = "Search complementary users from the user passed",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful complementary users search"),
-                    @ApiResponse(responseCode = "404", description = "Error login"),
+                    @ApiResponse(responseCode = "404", description = "Error searching complementary users"),
             })
     @GetMapping(path = "/getcomplementaryusers", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDTO>> searchComplementaryUsers(
