@@ -34,7 +34,7 @@ public class ParserThemeDTO {
     public Optional<Theme> themeDTOToTheme(ThemeDTO themeDTO) {
         Optional<Theme> oldTheme = themeRepository.findByName(themeDTO.getName());
         if (oldTheme.isPresent()) {
-            return Optional.of(new Theme(themeDTO.getName()));
+            return Optional.of(oldTheme.get());
         } else {
             return Optional.empty();
         }

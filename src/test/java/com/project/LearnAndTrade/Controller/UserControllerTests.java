@@ -1,10 +1,9 @@
 package com.project.LearnAndTrade.Controller;
 
+import com.project.LearnAndTrade.DTO.UserDTO;
+import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Entity.User;
-import com.project.LearnAndTrade.Service.GetUserData;
-import com.project.LearnAndTrade.Service.LogInUser;
-import com.project.LearnAndTrade.Service.SearchComplementaryUsers;
-import com.project.LearnAndTrade.Service.UpdateUserData;
+import com.project.LearnAndTrade.Service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,12 @@ public class UserControllerTests {
     @Autowired
     private final SearchComplementaryUsers searchComplementaryUsersService;
 
+    @Autowired
+    private final GetThemes getThemes;
+
+    @Autowired
+    private final ParserUserDTO parserUserDTO;
+
     private final User user;
 
     public UserControllerTests() {
@@ -42,6 +47,8 @@ public class UserControllerTests {
         getUserDataService = new GetUserData();
         updateUserDataService = new UpdateUserData();
         searchComplementaryUsersService = new SearchComplementaryUsers();
+        getThemes = new GetThemes();
+        parserUserDTO = new ParserUserDTO();
     }
 
     public void runAll() {
@@ -54,6 +61,7 @@ public class UserControllerTests {
         cantUpdateUser();
         canGetComplementaryUsers();
         cantGetComplementaryUsers();
+        canGetListOfThemes();
     }
 
     @BeforeAll
@@ -147,6 +155,24 @@ public class UserControllerTests {
         List<User> result = searchComplementaryUsersService.searchUsers(user);
         assertNotNull(result);
         System.out.println("9. 'cantGetComplementaryUsers' test passed");
+    }
+
+    @Test
+    @Order(10)
+    public void canGetListOfThemes() {
+        Optional<List<Theme>> result = getThemes.getAllThemes();
+        assertNotNull(result.get());
+        System.out.println("10. 'canGetListOfThemes' test passed");
+    }
+
+    @Test
+    @Order(11)
+    public void canConvertUserDTO() {
+        UserDTO userDTO = parserUserDTO.userToUserDTO(user);
+        assertEquals(user.getUsername(), userDTO.getUsername());
+        Optional<User> result = parserUserDTO.userDTOToUser(userDTO);
+        assertTrue(result.isPresent());
+        System.out.println("11. 'canConvertUserDTO' test passed");
     }
 
 }
