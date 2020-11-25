@@ -17,8 +17,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "Theme_T")
@@ -30,5 +32,13 @@ public class Theme {
     @NotNull
     @Getter
     private String name;
+
+    @ManyToMany(mappedBy = "interests")
+    @Getter
+    private List<User> interests_users;
+
+    @ManyToMany(mappedBy = "knowledges")
+    @Getter
+    private List<User> knowledges_users;
 
 }

@@ -43,12 +43,12 @@ public class User {
     private String password;
 
     @NotNull
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @Getter
     private List<Theme> interests;
 
     @NotNull
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @Getter
     private List<Theme> knowledges;
 
