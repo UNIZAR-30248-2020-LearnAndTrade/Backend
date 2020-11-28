@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "Rservation_T")
+@Table(name = "Reservation_T")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reservation {
