@@ -19,6 +19,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -35,10 +37,14 @@ public class Reservation {
 
     @NotNull
     @Getter
+    @Min(0)
+    @Max(23)
     private int startTime;
 
     @NotNull
     @Getter
+    @Min(0)
+    @Max(23)
     private int finishTime;
 
     @NotNull
