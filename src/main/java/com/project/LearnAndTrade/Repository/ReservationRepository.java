@@ -16,5 +16,11 @@ import com.project.LearnAndTrade.Entity.Reservation;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface ReservationRepository extends CrudRepository<Reservation, String> { }
+public interface ReservationRepository extends CrudRepository<Reservation, String> {
+
+    List<Reservation> findByTeacherUsernameAndStudentUsername(String teacherUsername, String studentUsername);
+
+}

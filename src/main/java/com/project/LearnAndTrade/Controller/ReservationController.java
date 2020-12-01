@@ -14,6 +14,7 @@ package com.project.LearnAndTrade.Controller;
 import com.project.LearnAndTrade.DTO.ReservationDTO;
 import com.project.LearnAndTrade.Entity.Reservation;
 import com.project.LearnAndTrade.Service.CreateReservation;
+import com.project.LearnAndTrade.Service.GetAllUserReservations;
 import com.project.LearnAndTrade.Service.GetReservationData;
 import com.project.LearnAndTrade.Service.ParserReservationDTO;
 import io.swagger.annotations.Api;
@@ -26,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -41,6 +43,9 @@ public class ReservationController {
 
     @Autowired
     private GetReservationData getReservationData;
+
+    @Autowired
+    private GetAllUserReservations getAllUserReservations;
 
     @Autowired
     private ParserReservationDTO parserReservationDTO;
@@ -59,7 +64,7 @@ public class ReservationController {
         if (reservation.isPresent()) {
             Reservation newReservation = createReservation.create(reservation.get());
             if (reservation.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(parserReservationDTO.reservationToReservationDTO(reservation.get()));
+                return ResponseEntity.status(HttpStatus.OK).body(parserReservationDTO.reservationToReservationDTO(newReservation));
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
@@ -74,11 +79,30 @@ public class ReservationController {
                     @ApiResponse(responseCode = "200", description = "Reservation successfully obtained"),
                     @ApiResponse(responseCode = "404", description = "Error getting reservation")
             })
-    @GetMapping(path = "get", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReservationDTO> getReservation(String id) {
+    @GetMapping(path = "/get", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ReservationDTO> getReservation(
+            @Parameter(description = "Id of the reservation", required = true) String id) {
         Optional<Reservation> reservation = getReservationData.getReservation(id);
         if (reservation.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(parserReservationDTO.reservationToReservationDTO(reservation.get()));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @Operation(
+            summary = "Get all reservations of a user",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Reservations successfully obtained"),
+                    @ApiResponse(responseCode = "404", description = "Error getting reservations")
+            })
+    @GetMapping(path = "/getAll", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ReservationDTO>> getUserReservations(
+            @Parameter(description = "Username of the user we want to get the reservations", required = true) String username) {
+        List<Reservation> reservations = getAllUserReservations.getAll(username);
+        if (reservations.size() > 0) {
+            List<ReservationDTO> sendReservations = parserReservationDTO.reservationToReservationDTOList(reservations);
+            return ResponseEntity.status(HttpStatus.OK).body(sendReservations);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

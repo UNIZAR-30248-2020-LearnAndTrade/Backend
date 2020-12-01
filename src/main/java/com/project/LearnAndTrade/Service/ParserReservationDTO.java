@@ -20,6 +20,8 @@ import com.project.LearnAndTrade.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,5 +65,16 @@ public class ParserReservationDTO {
         } else {
             return Optional.empty();
         }
+    }
+
+    public List<ReservationDTO> reservationToReservationDTOList(List<Reservation> reservations) {
+        List<ReservationDTO> reservationsDTO = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            reservationsDTO.add(new ReservationDTO(reservation.getId(), reservation.getStartTime(),
+                    reservation.getFinishTime(), reservation.getDate(),
+                    parserThemeDTO.themeToThemeDTO(reservation.getTheme()), reservation.getTeacherUsername(),
+                    reservation.getStudentUsername()));
+        }
+        return reservationsDTO;
     }
 }
