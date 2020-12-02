@@ -13,10 +13,7 @@ package com.project.LearnAndTrade.Controller;
 
 import com.project.LearnAndTrade.DTO.ReservationDTO;
 import com.project.LearnAndTrade.Entity.Reservation;
-import com.project.LearnAndTrade.Service.CreateReservation;
-import com.project.LearnAndTrade.Service.GetAllUserReservations;
-import com.project.LearnAndTrade.Service.GetReservationData;
-import com.project.LearnAndTrade.Service.ParserReservationDTO;
+import com.project.LearnAndTrade.Service.*;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -48,13 +45,16 @@ public class ReservationController {
     private GetAllUserReservations getAllUserReservations;
 
     @Autowired
+    private CheckReservationAvailability checkReservationAvailability;
+
+    @Autowired
     private ParserReservationDTO parserReservationDTO;
 
     @Operation(
             summary = "Creates a new reservation",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Reservation successfully saved"),
-                    @ApiResponse(responseCode = "500", description = "Reservation not successfully saved"),
+                    @ApiResponse(responseCode = "409", description = "Reservation not created beacuse user's schedule conflict"),
                     @ApiResponse(responseCode = "400", description = "Theme and/or usernames in the body do not exits")
             })
     @PostMapping(path = "/create", produces = APPLICATION_JSON_VALUE)
@@ -62,11 +62,14 @@ public class ReservationController {
             @Parameter(description = "ReservationDTO object wanted to be saved", required = true) @RequestBody ReservationDTO reservationDTO) {
         Optional<Reservation> reservation = parserReservationDTO.reservationDTOtoReservationAdd(reservationDTO);
         if (reservation.isPresent()) {
-            Reservation newReservation = createReservation.create(reservation.get());
-            if (reservation.isPresent()) {
+            Boolean isPossible = checkReservationAvailability.check(reservation.get().getTeacherUsername(),
+                    reservation.get().getStudentUsername(), reservation.get().getStartTime(), reservation.get().getFinishTime(),
+                    reservation.get().getDate());
+            if (isPossible) {
+                Reservation newReservation = createReservation.create(reservation.get());
                 return ResponseEntity.status(HttpStatus.OK).body(parserReservationDTO.reservationToReservationDTO(newReservation));
             } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

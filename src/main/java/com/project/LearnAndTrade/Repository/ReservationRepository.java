@@ -16,11 +16,18 @@ import com.project.LearnAndTrade.Entity.Reservation;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface ReservationRepository extends CrudRepository<Reservation, String> {
 
     List<Reservation> findByTeacherUsernameOrStudentUsername(String teacherUsername, String studentUsername);
+
+    List<Reservation> findByTeacherUsernameAndStartTimeAndFinishTimeAndDate(String teacherUsername, int startTime,
+                                                                            int finishTime, Date date);
+
+    List<Reservation> findByStudentUsernameAndStartTimeAndFinishTimeAndDate(String studentUsername, int startTime,
+                                                                            int finishTime, Date date);
 
 }
