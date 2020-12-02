@@ -25,7 +25,7 @@ public class GetAllUserReservations {
     private ReservationRepository reservationRepository;
 
     public List<Reservation> getAll(String username) {
-        return reservationRepository.findByTeacherUsernameAndStudentUsername(username, username);
+        return reservationRepository.findByTeacherUsernameOrStudentUsername(username, username);
     }
 
 }

@@ -21,6 +21,6 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends CrudRepository<Reservation, String> {
 
-    List<Reservation> findByTeacherUsernameAndStudentUsername(String teacherUsername, String studentUsername);
+    List<Reservation> findByTeacherUsernameOrStudentUsername(String teacherUsername, String studentUsername);
 
 }
