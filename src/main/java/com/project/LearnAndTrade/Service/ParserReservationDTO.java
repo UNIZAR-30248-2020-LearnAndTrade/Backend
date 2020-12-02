@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ParserReservationDTO {
@@ -59,7 +60,7 @@ public class ParserReservationDTO {
         Optional<User> teacher = userRepository.findByUsername(reservationDTO.getTeacherUsername());
         Optional<User> student = userRepository.findByUsername(reservationDTO.getStudentUsername());
         if (theme.isPresent() && teacher.isPresent() && student.isPresent()) {
-            return Optional.of(new Reservation(reservationDTO.getId(), reservationDTO.getStartTime(),
+            return Optional.of(new Reservation(UUID.randomUUID().toString(), reservationDTO.getStartTime(),
                     reservationDTO.getFinishTime(), reservationDTO.getDate(), theme.get(),
                     reservationDTO.getTeacherUsername(), reservationDTO.getStudentUsername()));
         } else {
