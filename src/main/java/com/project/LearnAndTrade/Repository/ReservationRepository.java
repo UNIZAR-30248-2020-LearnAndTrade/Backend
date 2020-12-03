@@ -13,6 +13,7 @@
 package com.project.LearnAndTrade.Repository;
 
 import com.project.LearnAndTrade.Entity.Reservation;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,11 +25,13 @@ public interface ReservationRepository extends CrudRepository<Reservation, Strin
 
     List<Reservation> findByTeacherUsernameOrStudentUsername(String teacherUsername, String studentUsername);
 
-    /*List<Reservation> findByTeacherUsernameAndDateAndStartTimeGreaterThanEqualOrFinishTimeLessThanEqualOrStartTimeLessThanEqualAndFinishTimeGreaterThanEqual(String teacherUsername,
-                                                                                                                                                             Date date, int startTime, int finishTime);
-
-    List<Reservation> findByStudentUsernameAndDateAndStartTimeGreaterThanEqualOrFinishTimeLessThanEqualOrStartTimeLessThanEqualAndFinishTimeGreaterThanEqual(String studentUsername,
-                                                                                                                                                             Date date, int startTime, int finishTime);
-
-*/
+    @Query(value = "SELECT r " +
+            " FROM Reservation r " +
+            " WHERE (r.studentUsername = ?1 OR r.teacherUsername = ?1 " +
+                " OR r.studentUsername = ?2 OR r.teacherUsername = ?2) " +
+            " AND r.date = ?3 " +
+            " AND ((r.startTime <= ?4 AND r.finishTime > ?4) " +
+                " OR (r.startTime < ?5 AND r.finishTime >= ?5) " +
+                " OR (r.startTime >= ?4 AND r.finishTime <= ?5))")
+    List<Reservation> findByUserAndHours(String usernameTeacher, String usernameStuden, Date date, int startTime, int finishTime);
 }
