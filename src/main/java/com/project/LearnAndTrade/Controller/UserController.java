@@ -77,7 +77,7 @@ public class UserController {
             summary = "Get user by it's username",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successfully gotten user"),
-                    @ApiResponse(responseCode = "404", description = "Error login"),
+                    @ApiResponse(responseCode = "404", description = "Error getting user"),
             })
     @GetMapping(path = "/getuser", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getUser(
@@ -96,7 +96,7 @@ public class UserController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful user update"),
                     @ApiResponse(responseCode = "201", description = "Successful user created"),
-                    @ApiResponse(responseCode = "404", description = "Error login"),
+                    @ApiResponse(responseCode = "404", description = "Error updating user"),
                     @ApiResponse(responseCode = "500", description = "Bad argument passed"),
             })
     @PostMapping(path = "/updateuser", produces = APPLICATION_JSON_VALUE)
@@ -119,7 +119,7 @@ public class UserController {
             summary = "Search complementary users from the user passed",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful complementary users search"),
-                    @ApiResponse(responseCode = "404", description = "Error searching complementary users"),
+                    @ApiResponse(responseCode = "404", description = "Error getting users"),
             })
     @GetMapping(path = "/getcomplementaryusers", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDTO>> searchComplementaryUsers(

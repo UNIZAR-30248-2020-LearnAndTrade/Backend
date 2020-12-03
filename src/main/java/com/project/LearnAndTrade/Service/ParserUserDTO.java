@@ -47,7 +47,11 @@ public class ParserUserDTO {
                         interests.get(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
                         userDTO.getBirthDate()));
             } else {
-                if (userDTO.getInterests().isEmpty()) {
+                if (userDTO.getInterests().isEmpty() && userDTO.getKnowledges().isEmpty()) {
+                    return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
+                            new ArrayList<>(), new ArrayList<>(), userDTO.getName(), userDTO.getSurname(),
+                            userDTO.getBirthDate()));
+                } else if (userDTO.getInterests().isEmpty()) {
                     return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
                             new ArrayList<>(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
                             userDTO.getBirthDate()));

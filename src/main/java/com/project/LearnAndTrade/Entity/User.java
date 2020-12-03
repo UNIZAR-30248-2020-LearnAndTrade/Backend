@@ -15,13 +15,8 @@ package com.project.LearnAndTrade.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -46,14 +41,12 @@ public class User {
     private String password;
 
     @NotNull
-    @ElementCollection
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany
     @Getter
     private List<Theme> interests;
 
     @NotNull
-    @ElementCollection
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany
     @Getter
     private List<Theme> knowledges;
 

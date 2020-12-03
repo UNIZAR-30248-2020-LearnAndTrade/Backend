@@ -45,10 +45,10 @@ public class ThemeController {
     private ParserThemeDTO parserThemeDTO;
 
     @Operation(
-            summary = "Get all themes in the application",
+            summary = "Get all themes",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful theme search"),
-                    @ApiResponse(responseCode = "404", description = "Error fetching themes"),
+                    @ApiResponse(responseCode = "200", description = "Successfully gotten themes"),
+                    @ApiResponse(responseCode = "404", description = "Error getting themes"),
             })
     @GetMapping(path = "/getthemes", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ThemeDTO>> getThemes() {
