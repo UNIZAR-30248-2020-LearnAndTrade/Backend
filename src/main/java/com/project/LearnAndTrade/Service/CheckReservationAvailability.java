@@ -26,14 +26,18 @@ public class CheckReservationAvailability {
     private ReservationRepository reservationRepository;
 
     public Boolean check(String teacher, String student, int startTime, int finishTime, Date date) {
-        List<Reservation> teacherReservationsAsTeacher = reservationRepository.findByTeacherUsernameAndStartTimeAndFinishTimeAndDate(teacher,
-                startTime, finishTime, date);
-        List<Reservation> studentReservationsAsStudent = reservationRepository.findByStudentUsernameAndStartTimeAndFinishTimeAndDate(student,
-                startTime, finishTime, date);
-        List<Reservation> teacherReservationsAsStudent = reservationRepository.findByStudentUsernameAndStartTimeAndFinishTimeAndDate(teacher,
-                startTime, finishTime, date);
-        List<Reservation> studentReservationsAsTeacher = reservationRepository.findByTeacherUsernameAndStartTimeAndFinishTimeAndDate(student,
-                startTime, finishTime, date);
+        List<Reservation> teacherReservationsAsTeacher = reservationRepository.
+                findByTeacherUsernameAndDateAndStartTimeGreaterThanEqualOrFinishTimeLessThanEqualOrStartTimeLessThanEqualAndFinishTimeGreaterThanEqual(teacher,
+                        date, startTime, finishTime);
+        List<Reservation> studentReservationsAsStudent = reservationRepository.
+                findByStudentUsernameAndDateAndStartTimeGreaterThanEqualOrFinishTimeLessThanEqualOrStartTimeLessThanEqualAndFinishTimeGreaterThanEqual(student,
+                date, startTime, finishTime);
+        List<Reservation> teacherReservationsAsStudent =
+                reservationRepository.findByStudentUsernameAndDateAndStartTimeGreaterThanEqualOrFinishTimeLessThanEqualOrStartTimeLessThanEqualAndFinishTimeGreaterThanEqual(teacher,
+                date, startTime, finishTime);
+        List<Reservation> studentReservationsAsTeacher =
+                reservationRepository.findByTeacherUsernameAndDateAndStartTimeGreaterThanEqualOrFinishTimeLessThanEqualOrStartTimeLessThanEqualAndFinishTimeGreaterThanEqual(student,
+                date, startTime, finishTime);
         return teacherReservationsAsTeacher.isEmpty() && studentReservationsAsStudent.isEmpty() &&
                 teacherReservationsAsStudent.isEmpty() && studentReservationsAsTeacher.isEmpty();
     }

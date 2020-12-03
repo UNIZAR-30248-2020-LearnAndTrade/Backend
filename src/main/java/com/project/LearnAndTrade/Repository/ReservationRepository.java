@@ -24,10 +24,10 @@ public interface ReservationRepository extends CrudRepository<Reservation, Strin
 
     List<Reservation> findByTeacherUsernameOrStudentUsername(String teacherUsername, String studentUsername);
 
-    List<Reservation> findByTeacherUsernameAndStartTimeAndFinishTimeAndDate(String teacherUsername, int startTime,
-                                                                            int finishTime, Date date);
+    List<Reservation> findByTeacherUsernameAndDateAndStartTimeGreaterThanEqualOrFinishTimeLessThanEqualOrStartTimeLessThanEqualAndFinishTimeGreaterThanEqual(String teacherUsername,
+                                                                                                                                                             Date date, int startTime, int finishTime);
 
-    List<Reservation> findByStudentUsernameAndStartTimeAndFinishTimeAndDate(String studentUsername, int startTime,
-                                                                            int finishTime, Date date);
+    List<Reservation> findByStudentUsernameAndDateAndStartTimeGreaterThanEqualOrFinishTimeLessThanEqualOrStartTimeLessThanEqualAndFinishTimeGreaterThanEqual(String studentUsername,
+                                                                                                                                                             Date date, int startTime, int finishTime);
 
 }
