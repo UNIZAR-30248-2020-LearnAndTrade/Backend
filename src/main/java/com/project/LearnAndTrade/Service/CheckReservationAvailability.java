@@ -26,7 +26,7 @@ public class CheckReservationAvailability {
     private ReservationRepository reservationRepository;
 
     public Boolean check(String teacher, String student, int startTime, int finishTime, Date date) {
-        List<Reservation> teacherReservationsAsTeacher = reservationRepository.
+       /* List<Reservation> teacherReservationsAsTeacher = reservationRepository.
                 findByTeacherUsernameAndDateAndStartTimeGreaterThanEqualOrFinishTimeLessThanEqualOrStartTimeLessThanEqualAndFinishTimeGreaterThanEqual(teacher,
                         date, startTime, finishTime);
         List<Reservation> studentReservationsAsStudent = reservationRepository.
@@ -40,6 +40,9 @@ public class CheckReservationAvailability {
                 date, startTime, finishTime);
         return teacherReservationsAsTeacher.isEmpty() && studentReservationsAsStudent.isEmpty() &&
                 teacherReservationsAsStudent.isEmpty() && studentReservationsAsTeacher.isEmpty();
+
+        */
+        return true;
     }
 
 }
