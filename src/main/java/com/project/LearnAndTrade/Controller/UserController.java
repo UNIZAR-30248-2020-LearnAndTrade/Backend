@@ -95,13 +95,12 @@ public class UserController {
             summary = "Update user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful user update"),
-                    @ApiResponse(responseCode = "201", description = "Successful user created"),
                     @ApiResponse(responseCode = "404", description = "Error updating user"),
                     @ApiResponse(responseCode = "500", description = "Bad argument passed"),
             })
     @PostMapping(path = "/updateuser", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> updateUser(
-            @Parameter(description = "UserDTO object wanted to be saved", required = true) @RequestBody UserDTO userDTO) {
+            @Parameter(description = "UserDTO object wanted to be updated", required = true) @RequestBody UserDTO userDTO) {
         try {
             Optional<User> userOptional = parserUserDTO.userDTOToUser(userDTO);
             if (userOptional.isPresent()) {

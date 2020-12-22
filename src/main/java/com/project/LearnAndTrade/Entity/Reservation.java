@@ -67,6 +67,16 @@ public class Reservation {
 
     @NotNull
     @Getter
-    private Boolean finished;
+    private Boolean teacherFinished;
+
+    @NotNull
+    @Getter
+    private Boolean studentFinished;
+
+    @NotNull
+    @Getter
+    @Min(0)
+    @Max(5)
+    private int rating;
 
 }

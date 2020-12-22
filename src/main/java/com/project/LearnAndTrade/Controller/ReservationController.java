@@ -45,6 +45,9 @@ public class ReservationController {
     private GetAllUserReservations getAllUserReservations;
 
     @Autowired
+    private UpdateReservationData updateReservationData;
+
+    @Autowired
     private CheckReservationAvailability checkReservationAvailability;
 
     @Autowired
@@ -108,6 +111,29 @@ public class ReservationController {
             return ResponseEntity.status(HttpStatus.OK).body(sendReservations);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @Operation(
+            summary = "Update reservation",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful reservation update"),
+                    @ApiResponse(responseCode = "404", description = "Error updating reservation"),
+                    @ApiResponse(responseCode = "500", description = "Bad argument passed"),
+            })
+    @PostMapping(path = "/updatereservation", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ReservationDTO> updateReservation(
+            @Parameter(description = "ReservationDTO object wanted to be updated", required = true) @RequestBody ReservationDTO reservationDTO) {
+        try {
+            Optional<Reservation> reservationOptional = parserReservationDTO.reservationDTOToReservation(reservationDTO);
+            if (reservationOptional.isPresent()) {
+                Reservation updatedReservation = updateReservationData.updateReservation(reservationOptional.get());
+                return ResponseEntity.status(HttpStatus.OK).body(parserReservationDTO.reservationToReservationDTO(updatedReservation));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
