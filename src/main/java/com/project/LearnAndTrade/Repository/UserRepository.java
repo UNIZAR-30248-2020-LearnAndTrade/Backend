@@ -31,8 +31,16 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     Optional<User> findByUsername(String username);
 
-    // This query find complementary users through one list of interests and other of knowledges
+    // This query finds complementary users through one list of interests and other of knowledges
     @Query(value = "SELECT DISTINCT u FROM User u JOIN u.interests i JOIN u.knowledges k WHERE k IN ?1 AND i IN ?2")
     List<User> findComplementaryUsers(List<Theme> interests, List<Theme> knowledges);
+
+    // This query searches users through one list of interests
+    @Query(value = "SELECT DISTINCT u FROM User u JOIN u.interests i WHERE i IN ?1")
+    List<User> searchUsersByListOfInterests(List<Theme> interests);
+
+    // This query searches users through one list of interests
+    @Query(value = "SELECT DISTINCT u FROM User u JOIN u.knowledges k WHERE k IN ?1")
+    List<User> searchUsersByListOfKnowledges(List<Theme> knowledges);
 
 }

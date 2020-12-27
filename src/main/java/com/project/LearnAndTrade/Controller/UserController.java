@@ -8,12 +8,13 @@
   @author Gonzalo Berné
   @author Eduardo Gimeno
   @author Jorge Turbica
-  @version 4.0, 30/10/2020
+  @version 5.0, 27/12/2020
  */
 
 package com.project.LearnAndTrade.Controller;
 
 import com.project.LearnAndTrade.DTO.UserDTO;
+import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.*;
 import io.swagger.annotations.Api;
@@ -52,6 +53,9 @@ public class UserController {
 
     @Autowired
     private ParserUserDTO parserUserDTO;
+
+    @Autowired
+    private SearchUsersByList searchUsersByList;
 
     @Operation(
             summary = "Perform login action for registered users",
@@ -133,6 +137,23 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @Operation(
+            summary = "Search users by a list of themes and if this list is knowledges or interests",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful users search"),
+            })
+    @GetMapping(path = "/getusersbylist", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserDTO>> searchUsersByList(
+            @Parameter(description = "List of themes", required = true) List<Theme> themeList,
+            @Parameter(description = "Boolean that indicate if the search is for interests or knowledges",
+                    required = true) boolean interests
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(searchUsersByList.search(themeList, interests)
+                .stream()
+                .map(parserUserDTO::userToUserDTO)
+                .collect(Collectors.toList()));
     }
 
 }
