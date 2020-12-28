@@ -13,6 +13,7 @@
 
 package com.project.LearnAndTrade.Controller;
 
+import com.project.LearnAndTrade.DTO.ThemeDTO;
 import com.project.LearnAndTrade.DTO.UserDTO;
 import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Entity.User;
@@ -27,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,6 +55,9 @@ public class UserController {
 
     @Autowired
     private ParserUserDTO parserUserDTO;
+
+    @Autowired
+    private ParserThemeDTO parserThemeDTO;
 
     @Autowired
     private SearchUsersByList searchUsersByList;
@@ -146,11 +151,17 @@ public class UserController {
             })
     @GetMapping(path = "/getusersbylist", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDTO>> searchUsersByList(
-            @Parameter(description = "List of themes", required = true) List<Theme> themeList,
+            @Parameter(description = "List of themes", required = true) String[] themes,
             @Parameter(description = "Boolean that indicate if the search is for interests or knowledges",
                     required = true) boolean interests
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(searchUsersByList.search(themeList, interests)
+        List<ThemeDTO> themeList = new ArrayList<>();
+        for (String theme : themes) {
+            ThemeDTO t = new ThemeDTO(theme);
+            themeList.add(t);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(searchUsersByList.search(
+                parserThemeDTO.themeDTOToThemeList(themeList).get(), interests)
                 .stream()
                 .map(parserUserDTO::userToUserDTO)
                 .collect(Collectors.toList()));
