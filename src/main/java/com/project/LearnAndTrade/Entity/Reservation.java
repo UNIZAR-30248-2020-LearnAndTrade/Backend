@@ -14,6 +14,7 @@ package com.project.LearnAndTrade.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -63,5 +64,19 @@ public class Reservation {
     @NotNull
     @Getter
     private String studentUsername;
+
+    @NotNull
+    @Getter
+    private Boolean teacherFinished;
+
+    @NotNull
+    @Getter
+    private Boolean studentFinished;
+
+    @NotNull
+    @Getter
+    @Min(0)
+    @Max(5)
+    private int rating;
 
 }

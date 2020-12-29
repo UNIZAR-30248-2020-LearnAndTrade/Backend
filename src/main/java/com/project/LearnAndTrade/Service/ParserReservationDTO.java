@@ -40,7 +40,9 @@ public class ParserReservationDTO {
     public ReservationDTO reservationToReservationDTO(Reservation reservation) {
         return new ReservationDTO(reservation.getId(), reservation.getStartTime(), reservation.getFinishTime(),
                 reservation.getDate(), parserThemeDTO.themeToThemeDTO(reservation.getTheme()),
-                reservation.getTeacherUsername(), reservation.getStudentUsername());
+                reservation.getTeacherUsername(), reservation.getStudentUsername(),
+                reservation.getTeacherFinished(), reservation.getStudentFinished(),
+                reservation.getRating());
     }
 
     public Optional<Reservation> reservationDTOToReservation(ReservationDTO reservationDTO) {
@@ -49,7 +51,9 @@ public class ParserReservationDTO {
             Optional<Theme> theme = parserThemeDTO.themeDTOToTheme(reservationDTO.getTheme());
             return Optional.of(new Reservation(reservationDTO.getId(), reservationDTO.getStartTime(),
                     reservationDTO.getFinishTime(), reservationDTO.getDate(), theme.get(),
-                    reservationDTO.getTeacherUsername(), reservationDTO.getStudentUsername()));
+                    reservationDTO.getTeacherUsername(), reservationDTO.getStudentUsername(),
+                    reservationDTO.getTeacherFinished(), reservationDTO.getStudentFinished(),
+                    reservationDTO.getRating()));
         } else {
             return Optional.empty();
         }
@@ -62,7 +66,9 @@ public class ParserReservationDTO {
         if (theme.isPresent() && teacher.isPresent() && student.isPresent()) {
             return Optional.of(new Reservation(UUID.randomUUID().toString(), reservationDTO.getStartTime(),
                     reservationDTO.getFinishTime(), reservationDTO.getDate(), theme.get(),
-                    reservationDTO.getTeacherUsername(), reservationDTO.getStudentUsername()));
+                    reservationDTO.getTeacherUsername(), reservationDTO.getStudentUsername(),
+                    reservationDTO.getTeacherFinished(), reservationDTO.getStudentFinished(),
+                    reservationDTO.getRating()));
         } else {
             return Optional.empty();
         }
@@ -74,7 +80,8 @@ public class ParserReservationDTO {
             reservationsDTO.add(new ReservationDTO(reservation.getId(), reservation.getStartTime(),
                     reservation.getFinishTime(), reservation.getDate(),
                     parserThemeDTO.themeToThemeDTO(reservation.getTheme()), reservation.getTeacherUsername(),
-                    reservation.getStudentUsername()));
+                    reservation.getStudentUsername(), reservation.getTeacherFinished(),
+                    reservation.getStudentFinished(), reservation.getRating()));
         }
         return reservationsDTO;
     }

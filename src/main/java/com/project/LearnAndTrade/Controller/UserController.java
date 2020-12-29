@@ -8,12 +8,14 @@
   @author Gonzalo Berné
   @author Eduardo Gimeno
   @author Jorge Turbica
-  @version 4.0, 30/10/2020
+  @version 5.0, 27/12/2020
  */
 
 package com.project.LearnAndTrade.Controller;
 
+import com.project.LearnAndTrade.DTO.ThemeDTO;
 import com.project.LearnAndTrade.DTO.UserDTO;
+import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.*;
 import io.swagger.annotations.Api;
@@ -26,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,6 +55,12 @@ public class UserController {
 
     @Autowired
     private ParserUserDTO parserUserDTO;
+
+    @Autowired
+    private ParserThemeDTO parserThemeDTO;
+
+    @Autowired
+    private SearchUsersByList searchUsersByList;
 
     @Operation(
             summary = "Perform login action for registered users",
@@ -95,13 +104,12 @@ public class UserController {
             summary = "Update user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful user update"),
-                    @ApiResponse(responseCode = "201", description = "Successful user created"),
                     @ApiResponse(responseCode = "404", description = "Error updating user"),
                     @ApiResponse(responseCode = "500", description = "Bad argument passed"),
             })
     @PostMapping(path = "/updateuser", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> updateUser(
-            @Parameter(description = "UserDTO object wanted to be saved", required = true) @RequestBody UserDTO userDTO) {
+            @Parameter(description = "UserDTO object wanted to be updated", required = true) @RequestBody UserDTO userDTO) {
         try {
             Optional<User> userOptional = parserUserDTO.userDTOToUser(userDTO);
             if (userOptional.isPresent()) {
@@ -134,6 +142,29 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @Operation(
+            summary = "Search users by a list of themes and if this list is knowledges or interests",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful users search"),
+            })
+    @GetMapping(path = "/getusersbylist", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserDTO>> searchUsersByList(
+            @Parameter(description = "List of themes", required = true) String[] themes,
+            @Parameter(description = "Boolean that indicate if the search is for interests or knowledges",
+                    required = true) boolean interests
+    ) {
+        List<ThemeDTO> themeList = new ArrayList<>();
+        for (String theme : themes) {
+            ThemeDTO t = new ThemeDTO(theme);
+            themeList.add(t);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(searchUsersByList.search(
+                parserThemeDTO.themeDTOToThemeList(themeList).get(), interests)
+                .stream()
+                .map(parserUserDTO::userToUserDTO)
+                .collect(Collectors.toList()));
     }
 
 }

@@ -71,4 +71,25 @@ public class ReservationDTO {
     )
     private String studentUsername;
 
+    @Schema(
+            description = "Teacher's confirmation of the reservation's ending",
+            example = "true",
+            required = true
+    )
+    private Boolean teacherFinished;
+
+    @Schema(
+            description = "Student's confirmation of the reservation's ending",
+            example = "false",
+            required = true
+    )
+    private Boolean studentFinished;
+
+    @Schema(
+            description = "Valoration of the reservation from 0 to 5",
+            example = "3",
+            required = true
+    )
+    private int rating;
+
 }
