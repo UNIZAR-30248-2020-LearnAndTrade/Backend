@@ -13,6 +13,7 @@
 package com.project.LearnAndTrade.Repository;
 
 import com.project.LearnAndTrade.Entity.Reservation;
+import com.project.LearnAndTrade.Entity.Theme;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -34,4 +35,6 @@ public interface ReservationRepository extends CrudRepository<Reservation, Strin
                 " OR (r.startTime < ?5 AND r.finishTime >= ?5) " +
                 " OR (r.startTime >= ?4 AND r.finishTime <= ?5))")
     List<Reservation> findByUserAndHours(String usernameTeacher, String usernameStuden, Date date, int startTime, int finishTime);
+
+    List<Reservation> findByTeacherUsernameAndTheme(String teacherUsername, Theme theme);
 }
