@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 public class ThemeControllerTests {
 
     @Autowired
-    private GetThemes getThemes;
+    private final GetThemes getThemes;
 
     public ThemeControllerTests() {
         getThemes = new GetThemes();
@@ -30,5 +30,7 @@ public class ThemeControllerTests {
         Optional<List<Theme>> result = getThemes.getAllThemes();
         assertNotNull(result);
         assertTrue(result.isPresent());
+        List<Theme> themes = result.get();
+        assertTrue(themes.size() > 0);
     }
 }

@@ -39,7 +39,6 @@ public class ChatControllerTests {
         chatMessageService = new ChatMessageService();
     }
 
-    @Disabled
     @Test
     @Order(1)
     public void canGetChat() {
@@ -92,7 +91,6 @@ public class ChatControllerTests {
         System.out.println("6. 'cantReadChat' test passed");
     }
 
-    @Disabled
     @Test
     @Order(7)
     public void canFindMessage() {
