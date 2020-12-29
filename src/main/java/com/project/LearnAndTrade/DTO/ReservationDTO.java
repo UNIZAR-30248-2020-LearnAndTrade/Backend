@@ -13,12 +13,14 @@ package com.project.LearnAndTrade.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Schema(name = "ReservationDTO", type = "object")
-@Getter
+@Data
 @AllArgsConstructor
 public class ReservationDTO {
 
@@ -48,6 +50,7 @@ public class ReservationDTO {
             example = "2020-12-12",
             required = true
     )
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     @Schema(

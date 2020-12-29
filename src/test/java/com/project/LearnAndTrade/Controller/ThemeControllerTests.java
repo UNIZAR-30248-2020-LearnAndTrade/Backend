@@ -10,9 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
 public class ThemeControllerTests {
@@ -28,9 +25,9 @@ public class ThemeControllerTests {
     @Order(1)
     public void canGetThemes() {
         Optional<List<Theme>> result = getThemes.getAllThemes();
-        assertNotNull(result);
-        assertTrue(result.isPresent());
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result.isPresent());
         List<Theme> themes = result.get();
-        assertTrue(themes.size() > 0);
+        Assertions.assertTrue(themes.size() > 0);
     }
 }

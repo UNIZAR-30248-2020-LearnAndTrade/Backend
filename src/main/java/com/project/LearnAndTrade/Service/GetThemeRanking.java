@@ -45,7 +45,7 @@ public class GetThemeRanking {
             Iterable<User> userIterable = userRepository.findAll();
             userIterable.forEach(users::add);
 
-            List<Reservation> reservations = new ArrayList<>();
+            List<Reservation> reservations;
             int total = 0;
             int average = 0;
             List<RankingEntry> ranking = new ArrayList<>();
@@ -54,7 +54,9 @@ public class GetThemeRanking {
                 for (Reservation reservation : reservations) {
                     total = total + reservation.getRating();
                 }
-                average = total / reservations.size();
+                if (reservations.size() != 0) {
+                    average = total / reservations.size();
+                }
                 RankingEntry entry = new RankingEntry(user.getUsername(), average);
                 ranking.add(entry);
             }

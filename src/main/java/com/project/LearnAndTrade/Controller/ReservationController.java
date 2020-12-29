@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -66,7 +67,7 @@ public class ReservationController {
             summary = "Creates a new reservation",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Reservation successfully saved"),
-                    @ApiResponse(responseCode = "409", description = "Reservation not created beacuse user's schedule conflict"),
+                    @ApiResponse(responseCode = "409", description = "Reservation not created because user's schedule conflict"),
                     @ApiResponse(responseCode = "400", description = "Theme and/or usernames in the body do not exits")
             })
     @PostMapping(path = "/create", produces = APPLICATION_JSON_VALUE)
@@ -141,7 +142,7 @@ public class ReservationController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

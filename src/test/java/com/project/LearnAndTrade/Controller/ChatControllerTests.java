@@ -5,7 +5,6 @@ import com.project.LearnAndTrade.Entity.MessageStatus;
 import com.project.LearnAndTrade.Exception.ResourceNotFoundException;
 import com.project.LearnAndTrade.Service.ChatMessageService;
 import com.project.LearnAndTrade.Service.ChatRoomService;
-import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
@@ -31,7 +28,7 @@ public class ChatControllerTests {
 //    private final ChatMessage chatMessage2;
 
     public ChatControllerTests() {
-        chatMessage1 = new ChatMessage("chatMessage1", "testChat", "testUser1", "testUser2", "Test User 1",
+        chatMessage1 = new ChatMessage("5fc7efad7b368b2f4602b5e8", "gonzalo_fernando", "gonzalo", "fernando", "Test User 1",
                 "Test User 2", "Mensaje de prueba para el test", new Date(), MessageStatus.DELIVERED);
 //        chatMessage2 = new ChatMessage("", "", "chatTest1", "chatTest2", "testName1", "testName2", "Contenido del mensaje recibido", new Date(), MessageStatus.RECEIVED);
 
@@ -44,9 +41,9 @@ public class ChatControllerTests {
     public void canGetChat() {
         Optional<String> chatId = chatRoomService
                 .getChatId(chatMessage1.getSenderId(), chatMessage1.getRecipientId(), false);
-        assertTrue(chatId.isPresent());
+        Assertions.assertTrue(chatId.isPresent());
         chatMessage1.setChatId(chatId.get());
-        assertNotEquals("", chatMessage1.getId());
+        Assertions.assertNotEquals("", chatMessage1.getId());
         System.out.println("1. 'canGetChat' test passed");
     }
 
@@ -55,7 +52,7 @@ public class ChatControllerTests {
     public void cantGetChat() {
         Optional<String> chatId = chatRoomService
                 .getChatId(null, null, false);
-        assertFalse(chatId.isPresent());
+        Assertions.assertFalse(chatId.isPresent());
         System.out.println("2. 'cantGetChat' test passed");
     }
 
@@ -63,7 +60,7 @@ public class ChatControllerTests {
     @Order(3)
     public void canCountNewMessages() {
         long result = chatMessageService.countNewMessages(chatMessage1.getSenderId(), chatMessage1.getRecipientId());
-        assertTrue(result >= 0);
+        Assertions.assertTrue(result >= 0);
         System.out.println("3. 'canCountNewMessages' test passed");
     }
 
@@ -71,7 +68,7 @@ public class ChatControllerTests {
     @Order(4)
     public void cantCountNewMessages() {
         long result = chatMessageService.countNewMessages(null, null);
-        assertTrue(result >= 0);
+        Assertions.assertTrue(result >= 0);
         System.out.println("4. 'cantCountNewMessages' test passed");
     }
 
@@ -79,7 +76,7 @@ public class ChatControllerTests {
     @Order(5)
     public void canReadChat() {
         List<ChatMessage> result = chatMessageService.findChatMessages(chatMessage1.getSenderId(), chatMessage1.getRecipientId());
-        assertNotNull(result);
+        Assertions.assertNotNull(result);
         System.out.println("5. 'canReadChat' test passed");
     }
 
@@ -87,7 +84,7 @@ public class ChatControllerTests {
     @Order(6)
     public void cantReadChat() {
         List<ChatMessage> result = chatMessageService.findChatMessages(null, null);
-        assertTrue(result.isEmpty());
+        Assertions.assertTrue(result.isEmpty());
         System.out.println("6. 'cantReadChat' test passed");
     }
 
@@ -95,7 +92,7 @@ public class ChatControllerTests {
     @Order(7)
     public void canFindMessage() {
         ChatMessage result = chatMessageService.findById(chatMessage1.getId());
-        assertNotNull(result);
+        Assertions.assertNotNull(result);
         System.out.println("7. 'canFindMessage' test passed");
     }
 
@@ -104,7 +101,7 @@ public class ChatControllerTests {
     public void cantFindMessage() {
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
             ChatMessage result = chatMessageService.findById("");
-            assertNull(result);
+            Assertions.assertNull(result);
         });
         System.out.println("8. 'cantFindMessage' test passed");
     }

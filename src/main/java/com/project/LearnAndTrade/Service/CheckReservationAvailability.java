@@ -27,7 +27,7 @@ public class CheckReservationAvailability {
 
     public Boolean check(String teacher, String student, int startTime, int finishTime, Date date) {
         List<Reservation> listReservations = reservationRepository.findByUserAndHours(teacher, student, date, startTime, finishTime);
-        for (Reservation r: listReservations) {
+        for (Reservation r : listReservations) {
             System.out.println(r.getId());
         }
         return listReservations.isEmpty();
