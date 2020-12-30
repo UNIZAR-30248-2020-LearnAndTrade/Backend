@@ -6,13 +6,15 @@
   This service gets a list of users by a list of themes,
     also depending if filters by interests or knowledges
 
+  The function separates the search in the repository for the differents themes
+    and then makes only one list using the function retainsAll
+
   @author Gonzalo Berné
-  @version 1.0, 27/12/2020
+  @version 2.0, 30/12/2020
  */
 
 package com.project.LearnAndTrade.Service;
 
-import com.project.LearnAndTrade.DTO.ThemeDTO;
 import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Repository.UserRepository;
