@@ -75,4 +75,11 @@ public class UserDTO {
     )
     private Date birthDate;
 
+    @Schema(
+            description = "URL where the image of the user is stored",
+            example = "https://learn-and-trade-backend.herokuapp.com/static/image.jpg",
+            required = true
+    )
+    private String imageUrl;
+
 }

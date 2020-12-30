@@ -34,7 +34,7 @@ public class ParserUserDTO {
     public UserDTO userToUserDTO(User user) {
         return new UserDTO(user.getUsername(), user.getEmail(), parserThemeDTO.themeToThemeDTOList(user.getInterests()),
                 parserThemeDTO.themeToThemeDTOList(user.getKnowledges()), user.getName(), user.getSurname(),
-                user.getBirthDate());
+                user.getBirthDate(), user.getImageUrl());
     }
 
     public Optional<User> userDTOToUser(UserDTO userDTO) {
@@ -45,20 +45,20 @@ public class ParserUserDTO {
             if (interests.isPresent() && knowledges.isPresent()) {
                 return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
                         interests.get(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
-                        userDTO.getBirthDate()));
+                        userDTO.getBirthDate(), userDTO.getImageUrl()));
             } else {
                 if (userDTO.getInterests().isEmpty() && userDTO.getKnowledges().isEmpty()) {
                     return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
                             new ArrayList<>(), new ArrayList<>(), userDTO.getName(), userDTO.getSurname(),
-                            userDTO.getBirthDate()));
+                            userDTO.getBirthDate(), userDTO.getImageUrl()));
                 } else if (userDTO.getInterests().isEmpty()) {
                     return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
                             new ArrayList<>(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
-                            userDTO.getBirthDate()));
+                            userDTO.getBirthDate(), userDTO.getImageUrl()));
                 } else if (userDTO.getKnowledges().isEmpty()) {
                     return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
                             interests.get(), new ArrayList<>(), userDTO.getName(), userDTO.getSurname(),
-                            userDTO.getBirthDate()));
+                            userDTO.getBirthDate(), userDTO.getImageUrl()));
                 } else {
                     return Optional.empty();
                 }

@@ -63,6 +63,10 @@ public class User {
     @Getter
     private Date birthDate;
 
+    @NotNull
+    @Getter
+    private String imageUrl;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
