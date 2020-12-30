@@ -39,7 +39,7 @@ public interface UserRepository extends CrudRepository<User, String> {
     @Query(value = "SELECT DISTINCT u FROM User u JOIN u.interests i WHERE i IN ?1")
     List<User> searchUsersByListOfInterests(List<Theme> interests);
 
-    // This query searches users through one list of interests
+    // This query searches users through one list of knowledges
     @Query(value = "SELECT DISTINCT u FROM User u JOIN u.knowledges k WHERE k IN ?1")
     List<User> searchUsersByListOfKnowledges(List<Theme> knowledges);
 
