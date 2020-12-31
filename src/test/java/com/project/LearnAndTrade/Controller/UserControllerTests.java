@@ -9,6 +9,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,11 +43,14 @@ public class UserControllerTests {
     @Autowired
     private final ParserThemeDTO parserThemeDTO;
 
+    @Autowired
+    private final SearchUsersByList searchUsersByList;
+
     private final User user;
 
     public UserControllerTests() {
         user = new User("testUsername", "emailUserTest@learnandtrade.com", "testPassword", new ArrayList<>(), new ArrayList<>(),
-                "Testing User", "Testing purpose", new Date(1604268089));
+                "Testing User", "Testing purpose", new Date(1604268089), "urlImagen");
         logInService = new LogInUser();
         getUserDataService = new GetUserData();
         updateUserDataService = new UpdateUserData();
@@ -54,6 +58,7 @@ public class UserControllerTests {
         getThemes = new GetThemes();
         parserUserDTO = new ParserUserDTO();
         parserThemeDTO = new ParserThemeDTO();
+        searchUsersByList = new SearchUsersByList();
     }
 
     public void runAll() {
@@ -123,7 +128,7 @@ public class UserControllerTests {
     @Order(6)
     public void canUpdateUser() {
         User newUser = new User(user.getUsername(), "emailUserTest2@learnandtrade.com", user.getPassword() + "2", user.getInterests(), user.getKnowledges(),
-                user.getName() + "2", user.getSurname() + "2", new Date());
+                user.getName() + "2", user.getSurname() + "2", new Date(), "urlImagen2");
         User result = updateUserDataService.updateUser(newUser);
         assertNotNull(result);
         assertEquals(newUser.getUsername(), result.getUsername());
@@ -133,6 +138,7 @@ public class UserControllerTests {
         assertEquals(newUser.getName(), result.getName());
         assertEquals(newUser.getSurname(), result.getSurname());
         assertEquals(newUser.getBirthDate(), result.getBirthDate());
+        assertEquals(newUser.getImageUrl(), result.getImageUrl());
         System.out.println("6. 'canUpdateUser' test passed");
     }
 
@@ -200,6 +206,25 @@ public class UserControllerTests {
             assertEquals(list.get().get(0).getName(), theme.get().getName());
         }
         System.out.println("12. 'canConvertThemeDTO' test passed");
+    }
+
+    @Test
+    @Transactional
+    @Order(13)
+    public void searchUsersByListsOfThemes() {
+        Optional<User> userGonzalo = getUserDataService.getUser("gonzalo");
+        if (userGonzalo.isPresent()) {
+
+            assertTrue(searchUsersByList.search(userGonzalo.get().getInterests(),
+                    true).contains(userGonzalo.get()));
+            assertTrue(searchUsersByList.search(userGonzalo.get().getKnowledges(),
+                    false).contains(userGonzalo.get()));
+
+            System.out.println("13. 'searchUsersByListOfInterests' test passed");
+        } else {
+            fail();
+            System.out.println("13. 'searchUsersByListOfInterests' test not passed, you should change user");
+        }
     }
 
 }
