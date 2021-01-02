@@ -38,6 +38,13 @@ public class UserDTO {
     private String email;
 
     @Schema(
+            description = "Password of the user",
+            example = "password123",
+            required = true
+    )
+    private String password;
+
+    @Schema(
             description = "Interests of the user",
             example = "[\"Baile\", \"Piano\"]",
             type = "array",
