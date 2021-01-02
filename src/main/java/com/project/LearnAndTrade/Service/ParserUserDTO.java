@@ -32,7 +32,7 @@ public class ParserUserDTO {
     private ParserThemeDTO parserThemeDTO;
 
     public UserDTO userToUserDTO(User user) {
-        return new UserDTO(user.getUsername(), user.getEmail(), parserThemeDTO.themeToThemeDTOList(user.getInterests()),
+        return new UserDTO(user.getUsername(), user.getEmail(), user.getPassword(), parserThemeDTO.themeToThemeDTOList(user.getInterests()),
                 parserThemeDTO.themeToThemeDTOList(user.getKnowledges()), user.getName(), user.getSurname(),
                 user.getBirthDate(), user.getImageUrl());
     }
