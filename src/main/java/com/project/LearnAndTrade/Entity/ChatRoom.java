@@ -27,7 +27,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "Chats")
+@Document
 public class ChatRoom {
     @Id
     private String id;

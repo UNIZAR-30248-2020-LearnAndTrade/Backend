@@ -30,7 +30,7 @@ public class ChatRoomService {
      */
     public Optional<String> getChatId(String senderId, String recipientId, boolean createIfNotExist) {
 
-        Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findFirstBySenderIdAndRecipientId(senderId, recipientId);
+        Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
         if (chatRoomOptional.isPresent()) {
             return Optional.of(chatRoomOptional.get().getChatId());
         } else {
