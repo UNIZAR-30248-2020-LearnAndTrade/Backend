@@ -34,4 +34,5 @@ public class ChatRoom {
     private String chatId;
     private String senderId;
     private String recipientId;
+    private String type = "Room";
 }
