@@ -45,6 +45,7 @@ public class ChatRoomService {
                     .chatId(chatId)
                     .senderId(senderId)
                     .recipientId(recipientId)
+                    .type("Room")
                     .build();
 
             ChatRoom recipientSender = ChatRoom
@@ -52,6 +53,7 @@ public class ChatRoomService {
                     .chatId(chatId)
                     .senderId(recipientId)
                     .recipientId(senderId)
+                    .type("Room")
                     .build();
             chatRoomRepository.save(senderRecipient);
             chatRoomRepository.save(recipientSender);
