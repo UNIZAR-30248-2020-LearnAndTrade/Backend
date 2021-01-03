@@ -135,4 +135,40 @@ public class ChatController {
         return ResponseEntity
                 .ok(chatMessageService.findById(id));
     }
+
+    /*
+            This method gets one room by its "senderId" and "recipientId".
+     */
+    @Operation(
+            summary = "This method gets one room by its \"senderId\" and \"recipientId\"",
+            description = "This method gets one room by its \"senderId\" and \"recipientId\"",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful room get"),
+                    @ApiResponse(responseCode = "404", description = "Error room reading"),
+            })
+    @GetMapping(path = "/rooms/{senderId}/{recipientId}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findRoom(
+            @Parameter(description = "Sender ID", required = true) @PathVariable String senderId,
+            @Parameter(description = "Recipient ID", required = true) @PathVariable String recipientId) {
+
+        return ResponseEntity
+                .ok(chatRoomService.getChatRoom(senderId, recipientId, true));
+    }
+
+    /*
+            This method gets all the room by its "senderId"".
+     */
+    @Operation(
+            summary = "This method gets all the room by its \"senderId\"",
+            description = "This method gets all the room by its \"senderId\"",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful rooms get"),
+                    @ApiResponse(responseCode = "404", description = "Error rooms reading"),
+            })
+    @GetMapping(path = "/rooms/{senderId}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findRooms(
+            @Parameter(description = "Sender ID", required = true) @PathVariable String senderId) {
+
+        return ResponseEntity.ok(chatRoomService.getChatRooms(senderId));
+    }
 }

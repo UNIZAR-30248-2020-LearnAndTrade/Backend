@@ -16,6 +16,7 @@ import com.project.LearnAndTrade.Repository.ChatRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,5 +61,17 @@ public class ChatRoomService {
 
             return Optional.of(chatId);
         }
+    }
+
+    public Optional<ChatRoom> getChatRoom(String senderId, String recipientId, boolean createIfNotExist) {
+        Optional<String> chatId = getChatId(senderId, recipientId, createIfNotExist);
+        if (chatId.isPresent()) {
+            return chatRoomRepository.findBySenderIdAndRecipientIdAndType(senderId, recipientId, "Room");
+        }
+        return Optional.empty();
+    }
+
+    public List<ChatRoom> getChatRooms(String senderId) {
+        return chatRoomRepository.findBySenderIdAndType(senderId, "Room");
     }
 }

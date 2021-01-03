@@ -64,7 +64,7 @@ public class ChatMessageService {
         Optional<String> chatId = chatRoomService.getChatId(senderId, recipientId, false);
 
         List<ChatMessage> messages =
-                chatId.map(cId -> repository.findByChatId(cId)).orElse(new ArrayList<>());
+                chatId.map(cId -> repository.findByChatIdAndType(cId, "Message")).orElse(new ArrayList<>());
 
         if (messages.size() > 0) {
             updateStatuses(senderId, recipientId, MessageStatus.DELIVERED);
