@@ -25,7 +25,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and().csrf().disable().authorizeRequests().antMatchers("/**").permitAll();
-        httpSecurity.headers().frameOptions().sameOrigin();
-        httpSecurity.requiresChannel().anyRequest().requiresSecure();
+        //httpSecurity.headers().frameOptions().sameOrigin();
+        //httpSecurity.requiresChannel().anyRequest().requiresSecure();
     }
 }
