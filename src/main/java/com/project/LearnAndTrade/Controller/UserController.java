@@ -174,7 +174,7 @@ public class UserController {
             summary = "Sign in user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful sign in"),
-                    @ApiResponse(responseCode = "404", description = "Error sign in"),
+                    @ApiResponse(responseCode = "404", description = "User already signed in"),
                     @ApiResponse(responseCode = "500", description = "Bad argument passed"),
             })
     @PostMapping(path = "/signin", produces = APPLICATION_JSON_VALUE)
@@ -182,11 +182,11 @@ public class UserController {
             @Parameter(description = "User data to be sign in", required = true) @RequestBody UserDTO userDTO) {
         try {
             Optional<User> userOptional = parserUserDTO.userDTOToUser(userDTO);
-            if (userOptional.isPresent()) {
+            if (!userOptional.isPresent()) {
                 User newUser = signInUser.signIn(userOptional.get());
                 return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(newUser));
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
