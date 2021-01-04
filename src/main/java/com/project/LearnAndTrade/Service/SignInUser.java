@@ -22,8 +22,13 @@ public class SignInUser {
     @Autowired
     private UserRepository userRepository;
 
-    public User signIn(User user) throws IllegalArgumentException {
-        return userRepository.save(user);
+    public Boolean signIn(User user) throws IllegalArgumentException {
+        if (userRepository.existsById(user.getUsername())) {
+            return false;
+        } else {
+            userRepository.save(user);
+            return true;
+        }
     }
 
 }

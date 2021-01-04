@@ -174,17 +174,20 @@ public class UserController {
             summary = "Sign in user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful sign in"),
-                    @ApiResponse(responseCode = "404", description = "User already signed in"),
+                    @ApiResponse(responseCode = "400", description = "User already signed in"),
                     @ApiResponse(responseCode = "500", description = "Bad argument passed"),
             })
     @PostMapping(path = "/signin", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> signIn(
             @Parameter(description = "User data to be sign in", required = true) @RequestBody UserDTO userDTO) {
         try {
-            Optional<User> userOptional = parserUserDTO.userDTOToUser(userDTO);
-            if (!userOptional.isPresent()) {
-                User newUser = signInUser.signIn(userOptional.get());
-                return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(newUser));
+            Optional<List<Theme>> interests = parserThemeDTO.themeDTOToThemeList(userDTO.getInterests());
+            Optional<List<Theme>> knowledges = parserThemeDTO.themeDTOToThemeList(userDTO.getKnowledges());
+            User user = new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),
+                    interests.get(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
+                    userDTO.getBirthDate(), userDTO.getImageUrl());
+            if (signInUser.signIn(user)) {
+                return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(user));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
