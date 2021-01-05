@@ -1,6 +1,8 @@
 language: java
 jdk:
   - oraclejdk13
+services:
+  - mongodb
 branches:
   only:
     - main
@@ -11,15 +13,5 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-#addons:
-#  sonarcloud:
-#    organization: unizar-30249-2020-grupo02 # the key of the org you chose at step #3
-#    token:
-#      secure: $SONAR_TOKEN # encrypted value of your token d005d02707dbd572bfcf6db1c1ae7e53da24bf51
-#script:
-#  # other script steps might be done before running the actual analysis
-#  - ./gradlew clean build
-#  - ./gradlew jacocoTestReport
-#  - sonar-scanner
 before_install:
   - chmod +x gradlew
