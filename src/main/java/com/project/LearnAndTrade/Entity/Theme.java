@@ -11,21 +11,18 @@
 
 package com.project.LearnAndTrade.Entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
 @Table(name = "Theme_T")
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class Theme {
 
     @Id
@@ -34,10 +31,12 @@ public class Theme {
     private String name;
 
     @ManyToMany(mappedBy = "interests")
+    @LazyCollection(LazyCollectionOption.FALSE)
     @Getter
     private List<User> interests_users;
 
     @ManyToMany(mappedBy = "knowledges")
+    @LazyCollection(LazyCollectionOption.FALSE)
     @Getter
     private List<User> knowledges_users;
 

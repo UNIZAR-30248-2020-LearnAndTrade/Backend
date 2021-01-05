@@ -53,11 +53,7 @@ public class ThemeController {
     @GetMapping(path = "/getthemes", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ThemeDTO>> getThemes() {
         Optional<List<Theme>> themes = getThemes.getAllThemes();
-        if (themes.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(parserThemeDTO.themeToThemeDTOList(themes.get()));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return themes.map(themeList -> ResponseEntity.status(HttpStatus.OK).body(parserThemeDTO.themeToThemeDTOList(themeList))).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
 }

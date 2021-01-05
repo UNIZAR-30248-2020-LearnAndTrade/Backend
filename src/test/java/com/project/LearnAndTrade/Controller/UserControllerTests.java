@@ -2,13 +2,13 @@ package com.project.LearnAndTrade.Controller;
 
 import com.project.LearnAndTrade.DTO.ThemeDTO;
 import com.project.LearnAndTrade.DTO.UserDTO;
-import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Entity.User;
 import com.project.LearnAndTrade.Service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -20,211 +20,156 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserControllerTests {
 
     @Autowired
-    private final LogInUser logInService;
+    private final UserController userController;
 
     @Autowired
-    private final GetUserData getUserDataService;
-
-    @Autowired
-    private final UpdateUserData updateUserDataService;
-
-    @Autowired
-    private final SearchComplementaryUsers searchComplementaryUsersService;
-
-    @Autowired
-    private final GetThemes getThemes;
+    private final SignInUser signInUser;
 
     @Autowired
     private final ParserUserDTO parserUserDTO;
 
-    @Autowired
-    private final ParserThemeDTO parserThemeDTO;
-
-    @Autowired
-    private final SearchUsersByList searchUsersByList;
-
-    private final User user;
+    private final UserDTO userDTO;
 
     public UserControllerTests() {
-        user = new User("testUsername", "emailUserTest@learnandtrade.com", "testPassword", new ArrayList<>(), new ArrayList<>(),
-                "Testing User", "Testing purpose", new Date(1604268089), "urlImagen");
-        logInService = new LogInUser();
-        getUserDataService = new GetUserData();
-        updateUserDataService = new UpdateUserData();
-        searchComplementaryUsersService = new SearchComplementaryUsers();
-        getThemes = new GetThemes();
+        this.userController = new UserController();
+        this.signInUser = new SignInUser();
         parserUserDTO = new ParserUserDTO();
-        parserThemeDTO = new ParserThemeDTO();
-        searchUsersByList = new SearchUsersByList();
-    }
-
-    public void runAll() {
-        canCreateUser();
-        canLogIn();
-        cantLogIn();
-        canGetUser();
-        cantGetUser();
-        canUpdateUser();
-        cantUpdateUser();
-        canGetComplementaryUsers();
-        cantGetComplementaryUsers();
-        canGetListOfThemes();
+        List<ThemeDTO> interests = new ArrayList<>();
+        interests.add(new ThemeDTO("Java"));
+        List<ThemeDTO> knowledges = new ArrayList<>();
+        knowledges.add(new ThemeDTO("Historia"));
+        userDTO = new UserDTO("testUsername", "emailUserTest@learnandtrade.com", "testPassword", interests, knowledges,
+                "Testing userDTO", "Testing purpose", new Date(1604268089), "urlImagen");
     }
 
     @BeforeAll
-    static void before() {
+    public void before() {
         System.out.println("Starting 'UserController' testing...");
     }
 
     @AfterAll
-    static void after() {
+    public void after() {
+        signInUser.deleteUSer(userDTO.getUsername());
         System.out.println("Finished 'UserController' testing...");
     }
 
     @Test
     @Order(1)
-    public void canCreateUser() {
-        User result = updateUserDataService.updateUser(user);
-        assertNotNull(result);
-        System.out.println("1. 'canCreateUser' test passed");
+    public void canSignIn() {
+        ResponseEntity<UserDTO> responseEntity = userController.signIn(userDTO);
+        Assertions.assertEquals(200, responseEntity.getStatusCode().value());
+        UserDTO userResponse = responseEntity.getBody();
+        assertNotNull(userResponse);
+        System.out.println("1. 'canSignIn' test passed");
     }
 
     @Test
     @Order(2)
-    public void canLogIn() {
-        Optional<User> result = logInService.logIn(user.getUsername(), user.getPassword());
-        assertTrue(result.isPresent());
-        System.out.println("2. 'canLogIn' test passed");
+    public void cantSignIn() {
+        ResponseEntity<UserDTO> responseEntity = userController.signIn(userDTO);
+        Assertions.assertEquals(400, responseEntity.getStatusCode().value());
+        System.out.println("2. 'cantSignIn' test passed");
     }
 
     @Test
     @Order(3)
-    public void cantLogIn() {
-        Optional<User> result = logInService.logIn("", "");
-        assertFalse(result.isPresent());
-        System.out.println("3. 'cantLogIn' test passed");
+    public void canLogIn() {
+        ResponseEntity<UserDTO> responseEntity = userController.logIn(userDTO.getUsername(), userDTO.getPassword());
+        Assertions.assertEquals(200, responseEntity.getStatusCode().value());
+        UserDTO userResponse = responseEntity.getBody();
+        assertNotNull(userResponse);
+        System.out.println("3. 'canLogIn' test passed");
     }
 
     @Test
     @Order(4)
-    public void canGetUser() {
-        Optional<User> result = getUserDataService.getUser(user.getUsername());
-        assertTrue(result.isPresent());
-        System.out.println("4. 'canGetUser' test passed");
+    public void cantLogIn() {
+        ResponseEntity<UserDTO> responseEntity = userController.logIn("", "");
+        Assertions.assertEquals(404, responseEntity.getStatusCode().value());
+        System.out.println("4. 'cantLogIn' test passed");
     }
 
     @Test
     @Order(5)
-    public void cantGetUser() {
-        Optional<User> result = getUserDataService.getUser(user.getUsername() + "2");
-        assertFalse(result.isPresent());
-        System.out.println("5. 'cantGetUser' test passed");
+    public void canGetUser() {
+        ResponseEntity<UserDTO> responseEntity = userController.getUser(userDTO.getUsername());
+        Assertions.assertEquals(200, responseEntity.getStatusCode().value());
+        UserDTO userResponse = responseEntity.getBody();
+        assertNotNull(userResponse);
+        System.out.println("5. 'canGetUser' test passed");
     }
 
     @Test
     @Order(6)
-    public void canUpdateUser() {
-        User newUser = new User(user.getUsername(), "emailUserTest2@learnandtrade.com", user.getPassword() + "2", user.getInterests(), user.getKnowledges(),
-                user.getName() + "2", user.getSurname() + "2", new Date(), "urlImagen2");
-        User result = updateUserDataService.updateUser(newUser);
-        assertNotNull(result);
-        assertEquals(newUser.getUsername(), result.getUsername());
-        assertEquals(newUser.getPassword(), result.getPassword());
-        assertEquals(newUser.getInterests(), result.getInterests());
-        assertEquals(newUser.getKnowledges(), result.getKnowledges());
-        assertEquals(newUser.getName(), result.getName());
-        assertEquals(newUser.getSurname(), result.getSurname());
-        assertEquals(newUser.getBirthDate(), result.getBirthDate());
-        assertEquals(newUser.getImageUrl(), result.getImageUrl());
-        System.out.println("6. 'canUpdateUser' test passed");
+    public void cantGetUser() {
+        ResponseEntity<UserDTO> responseEntity = userController.getUser(userDTO.getUsername() + "2");
+        Assertions.assertEquals(404, responseEntity.getStatusCode().value());
+        System.out.println("6. 'cantGetUser' test passed");
     }
 
     @Test
     @Order(7)
-    public void cantUpdateUser() {
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            User result = updateUserDataService.updateUser(null);
-        });
-        System.out.println("7. 'cantUpdateUser' test passed");
+    public void canUpdateUser() {
+        UserDTO newUser = new UserDTO(userDTO.getUsername(), "emailUserTest2@learnandtrade.com", userDTO.getPassword() + "2", userDTO.getInterests(),
+                userDTO.getKnowledges(),userDTO.getName() + "2", userDTO.getSurname() + "2", new Date(), "urlImagen2");
+        ResponseEntity<UserDTO> responseEntity = userController.updateUser(newUser);
+        Assertions.assertEquals(200, responseEntity.getStatusCode().value());
+        UserDTO result = responseEntity.getBody();
+        assertNotNull(result);
+        System.out.println("7. 'canUpdateUser' test passed");
     }
 
     @Test
     @Order(8)
-    public void canGetComplementaryUsers() {
-        List<User> result = searchComplementaryUsersService.searchUsers(user);
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        System.out.println("8. 'canGetComplementaryUsers' test passed");
+    public void cantUpdateUser() {
+        UserDTO newUser = new UserDTO(null, "emailUserTest2@learnandtrade.com", userDTO.getPassword() + "2", userDTO.getInterests(),
+                userDTO.getKnowledges(),userDTO.getName() + "2", userDTO.getSurname() + "2", new Date(), "urlImagen2");
+        ResponseEntity<UserDTO> responseEntity = userController.updateUser(newUser);
+        Assertions.assertEquals(404, responseEntity.getStatusCode().value());
+        System.out.println("8. 'cantUpdateUser' test passed");
     }
 
     @Test
     @Order(9)
-    public void cantGetComplementaryUsers() {
-        List<User> result = searchComplementaryUsersService.searchUsers(user);
+    public void canGetComplementaryUsers() {
+        ResponseEntity<List<UserDTO>> responseEntity = userController.searchComplementaryUsers(userDTO.getUsername());
+        Assertions.assertEquals(200, responseEntity.getStatusCode().value());
+        List<UserDTO> result = responseEntity.getBody();
         assertNotNull(result);
-        System.out.println("9. 'cantGetComplementaryUsers' test passed");
+        System.out.println("9. 'canGetComplementaryUsers' test passed");
     }
 
     @Test
     @Order(10)
-    public void canGetListOfThemes() {
-        Optional<List<Theme>> result = getThemes.getAllThemes();
-        assertTrue(result.isPresent());
-        System.out.println("10. 'canGetListOfThemes' test passed");
-    }
-
-    @Test
-    @Order(11)
-    public void canConvertUserDTO() {
-        UserDTO userDTO = parserUserDTO.userToUserDTO(user);
-        assertEquals(user.getUsername(), userDTO.getUsername());
-        Optional<User> result = parserUserDTO.userDTOToUser(userDTO);
-        assertTrue(result.isPresent());
-        System.out.println("11. 'canConvertUserDTO' test passed");
-    }
-
-    @Test
-    @Order(12)
-    public void canConvertThemeDTO() {
-        Optional<List<Theme>> list = getThemes.getAllThemes();
-        if (list.isPresent()) {
-            List<ThemeDTO> listDTO = parserThemeDTO.themeToThemeDTOList(list.get());
-            assertEquals(listDTO.size(), list.get().size());
-
-            Optional<List<Theme>> list2 = parserThemeDTO.themeDTOToThemeList(listDTO);
-            assertTrue(list2.isPresent());
-            assertEquals(list2.get().size(), list.get().size());
-
-            ThemeDTO themeDTO = parserThemeDTO.themeToThemeDTO(list.get().get(0));
-            assertEquals(list.get().get(0).getName(), themeDTO.getName());
-
-            Optional<Theme> theme = parserThemeDTO.themeDTOToTheme(themeDTO);
-            assertTrue(theme.isPresent());
-            assertEquals(list.get().get(0).getName(), theme.get().getName());
-        }
-        System.out.println("12. 'canConvertThemeDTO' test passed");
+    public void cantGetComplementaryUsers() {
+        ResponseEntity<List<UserDTO>> responseEntity = userController.searchComplementaryUsers("");
+        Assertions.assertEquals(404, responseEntity.getStatusCode().value());
+        System.out.println("10. 'cantGetComplementaryUsers' test passed");
     }
 
     @Test
     @Transactional
-    @Order(13)
+    @Order(11)
     public void searchUsersByListsOfThemes() {
-        Optional<User> userGonzalo = getUserDataService.getUser("gonzalo");
-        if (userGonzalo.isPresent()) {
+        ResponseEntity<List<UserDTO>> responseEntity =
+                userController.searchUsersByList(new String[]{"Java"},true);
+        Assertions.assertEquals(200, responseEntity.getStatusCode().value());
+        System.out.println("11. 'searchUsersByListOfInterests' test passed");
+    }
 
-            assertTrue(searchUsersByList.search(userGonzalo.get().getInterests(),
-                    true).contains(userGonzalo.get()));
-            assertTrue(searchUsersByList.search(userGonzalo.get().getKnowledges(),
-                    false).contains(userGonzalo.get()));
-
-            System.out.println("13. 'searchUsersByListOfInterests' test passed");
-        } else {
-            fail();
-            System.out.println("13. 'searchUsersByListOfInterests' test not passed, you should change user");
-        }
+    @Test
+    @Order(12)
+    public void canConvertUserDTO() {
+        Optional<User> user = parserUserDTO.userDTOToUser(userDTO);
+        Assertions.assertTrue(user.isPresent());
+        assertEquals(userDTO.getUsername(), user.get().getUsername());
+        UserDTO result = parserUserDTO.userToUserDTO(user.get());
+        assertNotNull(result);
+        System.out.println("12. 'canConvertUserDTO' test passed");
     }
 
 }

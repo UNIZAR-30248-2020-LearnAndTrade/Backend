@@ -31,4 +31,8 @@ public class SignInUser {
         }
     }
 
+    public void deleteUSer(String username) {
+        userRepository.deleteById(username);
+    }
+
 }

@@ -32,12 +32,7 @@ public class ParserThemeDTO {
     }
 
     public Optional<Theme> themeDTOToTheme(ThemeDTO themeDTO) {
-        Optional<Theme> oldTheme = themeRepository.findByName(themeDTO.getName());
-        if (oldTheme.isPresent()) {
-            return Optional.of(oldTheme.get());
-        } else {
-            return Optional.empty();
-        }
+        return themeRepository.findByName(themeDTO.getName());
     }
 
     public List<ThemeDTO> themeToThemeDTOList(List<Theme> themes) {
@@ -48,18 +43,12 @@ public class ParserThemeDTO {
         return themesDTO;
     }
 
-    public Optional<List<Theme>> themeDTOToThemeList(List<ThemeDTO> themesDTO) {
+    public List<Theme> themeDTOToThemeList(List<ThemeDTO> themesDTO) {
         List<Theme> themes = new ArrayList<>();
         for (ThemeDTO themeDTO : themesDTO) {
             Optional<Theme> oldTheme = themeRepository.findByName(themeDTO.getName());
-            if (oldTheme.isPresent()) {
-                themes.add(oldTheme.get());
-            }
+            oldTheme.ifPresent(themes::add);
         }
-        if (themes.size() > 0) {
-            return  Optional.of(themes);
-        } else {
-            return Optional.empty();
-        }
+        return themes;
     }
 }

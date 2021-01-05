@@ -15,7 +15,6 @@ import com.project.LearnAndTrade.AuxiliaryObject.RankingEntry;
 import com.project.LearnAndTrade.DTO.RankingEntryDTO;
 import com.project.LearnAndTrade.DTO.ReservationDTO;
 import com.project.LearnAndTrade.Entity.Reservation;
-import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Service.*;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;

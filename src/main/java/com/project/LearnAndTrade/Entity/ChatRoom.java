@@ -34,5 +34,6 @@ public class ChatRoom {
     private String chatId;
     private String senderId;
     private String recipientId;
+    @Builder.Default
     private String type = "Room";
 }

@@ -15,8 +15,13 @@ package com.project.LearnAndTrade.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -43,11 +48,13 @@ public class User {
 
     @NotNull
     @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     @Getter
     private List<Theme> interests;
 
     @NotNull
     @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     @Getter
     private List<Theme> knowledges;
 

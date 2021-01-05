@@ -11,6 +11,7 @@
 
 package com.project.LearnAndTrade.Service;
 
+import com.project.LearnAndTrade.DTO.ThemeDTO;
 import com.project.LearnAndTrade.DTO.UserDTO;
 import com.project.LearnAndTrade.Entity.Theme;
 import com.project.LearnAndTrade.Entity.User;
@@ -32,19 +33,20 @@ public class ParserUserDTO {
     private ParserThemeDTO parserThemeDTO;
 
     public UserDTO userToUserDTO(User user) {
-        return new UserDTO(user.getUsername(), user.getEmail(), user.getPassword(), parserThemeDTO.themeToThemeDTOList(user.getInterests()),
-                parserThemeDTO.themeToThemeDTOList(user.getKnowledges()), user.getName(), user.getSurname(),
+        List<ThemeDTO> interests = parserThemeDTO.themeToThemeDTOList(user.getInterests());
+        List<ThemeDTO> knowledges = parserThemeDTO.themeToThemeDTOList(user.getKnowledges());
+        return new UserDTO(user.getUsername(), user.getEmail(), user.getPassword(), interests, knowledges, user.getName(), user.getSurname(),
                 user.getBirthDate(), user.getImageUrl());
     }
 
     public Optional<User> userDTOToUser(UserDTO userDTO) {
         Optional<User> oldUser = userRepository.findByUsername(userDTO.getUsername());
         if (oldUser.isPresent()) {
-            Optional<List<Theme>> interests = parserThemeDTO.themeDTOToThemeList(userDTO.getInterests());
-            Optional<List<Theme>> knowledges = parserThemeDTO.themeDTOToThemeList(userDTO.getKnowledges());
-            if (interests.isPresent() && knowledges.isPresent()) {
+            List<Theme> interests = parserThemeDTO.themeDTOToThemeList(userDTO.getInterests());
+            List<Theme> knowledges = parserThemeDTO.themeDTOToThemeList(userDTO.getKnowledges());
+            if (!interests.isEmpty() && !knowledges.isEmpty()) {
                 return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
-                        interests.get(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
+                        interests, knowledges, userDTO.getName(), userDTO.getSurname(),
                         userDTO.getBirthDate(), userDTO.getImageUrl()));
             } else {
                 if (userDTO.getInterests().isEmpty() && userDTO.getKnowledges().isEmpty()) {
@@ -53,11 +55,11 @@ public class ParserUserDTO {
                             userDTO.getBirthDate(), userDTO.getImageUrl()));
                 } else if (userDTO.getInterests().isEmpty()) {
                     return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
-                            new ArrayList<>(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
+                            new ArrayList<>(), knowledges, userDTO.getName(), userDTO.getSurname(),
                             userDTO.getBirthDate(), userDTO.getImageUrl()));
                 } else if (userDTO.getKnowledges().isEmpty()) {
                     return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
-                            interests.get(), new ArrayList<>(), userDTO.getName(), userDTO.getSurname(),
+                            interests, new ArrayList<>(), userDTO.getName(), userDTO.getSurname(),
                             userDTO.getBirthDate(), userDTO.getImageUrl()));
                 } else {
                     return Optional.empty();

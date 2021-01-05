@@ -94,6 +94,19 @@ public class ChatControllerTests {
         Assertions.assertEquals(200, responseEntity.getStatusCode().value());
         List<ChatMessage> result = responseEntity.getBody();
         Assertions.assertNotNull(result);
+        if (!result.isEmpty()) {
+            ChatMessage chatMessage = result.get(0);
+            Assertions.assertNotNull(chatMessage.getId());
+            Assertions.assertNotNull(chatMessage.getChatId());
+            Assertions.assertNotNull(chatMessage.getSenderId());
+            Assertions.assertNotNull(chatMessage.getRecipientId());
+            Assertions.assertNotNull(chatMessage.getSenderName());
+            Assertions.assertNotNull(chatMessage.getRecipientName());
+            Assertions.assertNotNull(chatMessage.getContent());
+            Assertions.assertNotNull(chatMessage.getTimestamp());
+            Assertions.assertNotNull(chatMessage.getStatus());
+            Assertions.assertNotNull(chatMessage.getType());
+        }
         System.out.println("5. 'canReadChat' test passed");
     }
 

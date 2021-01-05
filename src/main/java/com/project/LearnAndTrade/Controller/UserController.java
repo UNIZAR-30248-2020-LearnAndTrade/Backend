@@ -66,6 +66,32 @@ public class UserController {
     private SearchUsersByList searchUsersByList;
 
     @Operation(
+            summary = "Sign in user",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful sign in"),
+                    @ApiResponse(responseCode = "400", description = "User already signed in"),
+                    @ApiResponse(responseCode = "500", description = "Bad argument passed"),
+            })
+    @PostMapping(path = "/signin", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> signIn(
+            @Parameter(description = "User data to be sign in", required = true) @RequestBody UserDTO userDTO) {
+        try {
+            List<Theme> interests = parserThemeDTO.themeDTOToThemeList(userDTO.getInterests());
+            List<Theme> knowledges = parserThemeDTO.themeDTOToThemeList(userDTO.getKnowledges());
+            User user = new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),
+                    interests, knowledges, userDTO.getName(), userDTO.getSurname(),
+                    userDTO.getBirthDate(), userDTO.getImageUrl());
+            if (signInUser.signIn(user)) {
+                return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(user));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @Operation(
             summary = "Perform login action for registered users",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Successful login"),
@@ -78,7 +104,6 @@ public class UserController {
     ) {
         Optional<User> userOptional = logInUser.logIn(username, password);
         if (userOptional.isPresent()) {
-            //return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(userOptional.get()));
             return ResponseEntity.ok().body(parserUserDTO.userToUserDTO(userOptional.get()));
         } else {
             return ResponseEntity.notFound().build();
@@ -155,8 +180,7 @@ public class UserController {
     @GetMapping(path = "/getusersbylist", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDTO>> searchUsersByList(
             @Parameter(description = "List of themes", required = true) String[] themes,
-            @Parameter(description = "Boolean that indicate if the search is for interests or knowledges",
-                    required = true) boolean interests
+            @Parameter(description = "Boolean that indicate if the search is for interests or knowledges", required = true) boolean interests
     ) {
         List<ThemeDTO> themeList = new ArrayList<>();
         for (String theme : themes) {
@@ -164,36 +188,10 @@ public class UserController {
             themeList.add(t);
         }
         return ResponseEntity.status(HttpStatus.OK).body(searchUsersByList.search(
-                parserThemeDTO.themeDTOToThemeList(themeList).get(), interests)
+                parserThemeDTO.themeDTOToThemeList(themeList), interests)
                 .stream()
                 .map(parserUserDTO::userToUserDTO)
                 .collect(Collectors.toList()));
-    }
-
-    @Operation(
-            summary = "Sign in user",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful sign in"),
-                    @ApiResponse(responseCode = "400", description = "User already signed in"),
-                    @ApiResponse(responseCode = "500", description = "Bad argument passed"),
-            })
-    @PostMapping(path = "/signin", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> signIn(
-            @Parameter(description = "User data to be sign in", required = true) @RequestBody UserDTO userDTO) {
-        try {
-            Optional<List<Theme>> interests = parserThemeDTO.themeDTOToThemeList(userDTO.getInterests());
-            Optional<List<Theme>> knowledges = parserThemeDTO.themeDTOToThemeList(userDTO.getKnowledges());
-            User user = new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),
-                    interests.get(), knowledges.get(), userDTO.getName(), userDTO.getSurname(),
-                    userDTO.getBirthDate(), userDTO.getImageUrl());
-            if (signInUser.signIn(user)) {
-                return ResponseEntity.status(HttpStatus.OK).body(parserUserDTO.userToUserDTO(user));
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            }
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
 }
