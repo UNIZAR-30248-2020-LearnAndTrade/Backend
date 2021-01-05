@@ -52,8 +52,8 @@ public class ChatMessageService {
             a "senderId" and a "recipientId".
      */
     public long countNewMessages(String senderId, String recipientId) {
-        return repository.countBySenderIdAndRecipientIdAndStatus(
-                senderId, recipientId, MessageStatus.RECEIVED);
+        return repository.countBySenderIdAndRecipientIdAndStatusAndType(
+                senderId, recipientId, MessageStatus.RECEIVED, "Message");
     }
 
     /*
@@ -94,8 +94,9 @@ public class ChatMessageService {
     public void updateStatuses(String senderId, String recipientId, MessageStatus status) {
         Query query = new Query(
                 Criteria
-                        .where("senderId").is(senderId)
-                        .and("recipientId").is(recipientId));
+                        .where("senderId").is(recipientId)
+                        .and("recipientId").is(senderId)
+                        .and("type").is("Message"));
         Update update = Update.update("status", status);
         mongoOperations.updateMulti(query, update, ChatMessage.class);
     }
