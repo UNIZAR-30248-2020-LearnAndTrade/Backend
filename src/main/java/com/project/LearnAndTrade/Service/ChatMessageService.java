@@ -21,6 +21,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,9 @@ public class ChatMessageService {
         This service counts all the recieved messages in a chat between two users by
             a "senderId" and a "recipientId".
      */
-    public long countNewMessages(String senderId, String recipientId) {
+    public long countNewMessages(String senderId, String recipientId) throws IllegalArgumentException {
+        Assert.notNull(senderId, "senderId must not be null");
+        Assert.notNull(recipientId, "recipientId must not be null");
         return repository.countBySenderIdAndRecipientIdAndStatus(
                 senderId, recipientId, MessageStatus.RECEIVED);
     }
@@ -60,7 +63,9 @@ public class ChatMessageService {
         This service finds all the messages in a chat between two users by
             a "senderId" and a "recipientId".
      */
-    public List<ChatMessage> findChatMessages(String senderId, String recipientId) {
+    public List<ChatMessage> findChatMessages(String senderId, String recipientId) throws IllegalArgumentException {
+        Assert.notNull(senderId, "senderId must not be null");
+        Assert.notNull(recipientId, "recipientId must not be null");
         Optional<String> chatId = chatRoomService.getChatId(senderId, recipientId, false);
 
         List<ChatMessage> messages =
@@ -76,7 +81,7 @@ public class ChatMessageService {
     /*
         This service finds a messages in a chat between two users by the message "id".
      */
-    public ChatMessage findById(String id) {
+    public ChatMessage findById(String id) throws ResourceNotFoundException {
         return repository
                 .findById(id)
                 .map(chatMessage -> {
@@ -98,5 +103,12 @@ public class ChatMessageService {
                         .and("recipientId").is(recipientId));
         Update update = Update.update("status", status);
         mongoOperations.updateMulti(query, update, ChatMessage.class);
+    }
+
+    /*
+        This service deletes a chat message by its id
+     */
+    public void deleteById(String id) {
+        repository.deleteById(id);
     }
 }

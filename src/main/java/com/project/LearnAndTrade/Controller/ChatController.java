@@ -13,6 +13,7 @@ package com.project.LearnAndTrade.Controller;
 
 import com.project.LearnAndTrade.Entity.ChatMessage;
 import com.project.LearnAndTrade.Entity.ChatNotification;
+import com.project.LearnAndTrade.Entity.ChatRoom;
 import com.project.LearnAndTrade.Service.ChatMessageService;
 import com.project.LearnAndTrade.Service.ChatRoomService;
 import io.swagger.annotations.Api;
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -28,6 +30,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.xml.ws.Response;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -58,27 +62,31 @@ public class ChatController {
                     @ApiResponse(responseCode = "404", description = "Error adding message"),
             })
     @MessageMapping("/chat")
-    public void processMessage(
+    public ResponseEntity<Void> processMessage(
             @Parameter(description = "Chat message user wants to send", required = true) @Payload ChatMessage chatMessage
     ) {
-        /*
-            By the "senderId" and the "recipientId" of the message,
-            the ChatRoomService get the "chatId" of the ChatRoom which it belongs.
-         */
-        Optional<String> chatId = chatRoomService
-                .getChatId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true);
-        chatMessage.setChatId(chatId.get());
+        try {
+            // By the "senderId" and the "recipientId" of the message,
+            // the ChatRoomService get the "chatId" of the ChatRoom which it belongs.
+            Optional<String> chatId = chatRoomService
+                    .getChatId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true);
+            chatMessage.setChatId(chatId.get());
 
-        // The message is saved in the database.
-        ChatMessage saved = chatMessageService.save(chatMessage);
+            // The message is saved in the database.
+            ChatMessage saved = chatMessageService.save(chatMessage);
 
-        // The message is sent to the recipient user.
-        messagingTemplate.convertAndSendToUser(
-                chatMessage.getRecipientId(), "/queue/messages",
-                new ChatNotification(
-                        saved.getId(),
-                        saved.getSenderId(),
-                        saved.getSenderName()));
+            // The message is sent to the recipient user.
+            messagingTemplate.convertAndSendToUser(
+                    chatMessage.getRecipientId(), "/queue/messages",
+                    new ChatNotification(
+                            saved.getId(),
+                            saved.getSenderId(),
+                            saved.getSenderName()));
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     /*
@@ -96,8 +104,12 @@ public class ChatController {
             @Parameter(description = "Sender ID", required = true) @PathVariable String senderId,
             @Parameter(description = "Recipient ID", required = true) @PathVariable String recipientId
     ) {
-        return ResponseEntity
-                .ok(chatMessageService.countNewMessages(senderId, recipientId));
+        try {
+            Long numMessages = chatMessageService.countNewMessages(senderId, recipientId);
+            return ResponseEntity.ok(numMessages);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     /*
@@ -111,11 +123,15 @@ public class ChatController {
                     @ApiResponse(responseCode = "404", description = "Error messages reading"),
             })
     @GetMapping(path = "/messages/{senderId}/{recipientId}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findChatMessages(
+    public ResponseEntity<List<ChatMessage>> findChatMessages(
             @Parameter(description = "Sender ID", required = true) @PathVariable String senderId,
             @Parameter(description = "Recipient ID", required = true) @PathVariable String recipientId) {
-        return ResponseEntity
-                .ok(chatMessageService.findChatMessages(senderId, recipientId));
+        try {
+            List<ChatMessage> list = chatMessageService.findChatMessages(senderId, recipientId);
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     /*
@@ -129,11 +145,16 @@ public class ChatController {
                     @ApiResponse(responseCode = "404", description = "Error messages reading"),
             })
     @GetMapping(path = "/messages/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findMessage(
+    public ResponseEntity<ChatMessage> findMessage(
             @Parameter(description = "Message ID", required = true) @PathVariable String id
     ) {
-        return ResponseEntity
-                .ok(chatMessageService.findById(id));
+        try {
+            ChatMessage chatMessage = chatMessageService.findById(id);
+            return ResponseEntity.ok(chatMessage);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
     }
 
     /*
@@ -147,12 +168,16 @@ public class ChatController {
                     @ApiResponse(responseCode = "404", description = "Error room reading"),
             })
     @GetMapping(path = "/rooms/{senderId}/{recipientId}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findRoom(
+    public ResponseEntity<ChatRoom> findRoom(
             @Parameter(description = "Sender ID", required = true) @PathVariable String senderId,
-            @Parameter(description = "Recipient ID", required = true) @PathVariable String recipientId) {
-
-        return ResponseEntity
-                .ok(chatRoomService.getChatRoom(senderId, recipientId, true));
+            @Parameter(description = "Recipient ID", required = true) @PathVariable String recipientId
+    ) {
+        try {
+            Optional<ChatRoom> chatRoom = chatRoomService.getChatRoom(senderId, recipientId, true);
+            return chatRoom.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     /*
@@ -166,9 +191,14 @@ public class ChatController {
                     @ApiResponse(responseCode = "404", description = "Error rooms reading"),
             })
     @GetMapping(path = "/rooms/{senderId}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findRooms(
-            @Parameter(description = "Sender ID", required = true) @PathVariable String senderId) {
-
-        return ResponseEntity.ok(chatRoomService.getChatRooms(senderId));
+    public ResponseEntity<List<ChatRoom>> findRooms(
+            @Parameter(description = "Sender ID", required = true) @PathVariable String senderId
+    ) {
+        try {
+            List<ChatRoom> list = chatRoomService.getChatRooms(senderId);
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

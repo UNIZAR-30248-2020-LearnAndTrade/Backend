@@ -15,6 +15,7 @@ import com.project.LearnAndTrade.Entity.ChatRoom;
 import com.project.LearnAndTrade.Repository.ChatRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +64,9 @@ public class ChatRoomService {
         }
     }
 
-    public Optional<ChatRoom> getChatRoom(String senderId, String recipientId, boolean createIfNotExist) {
+    public Optional<ChatRoom> getChatRoom(String senderId, String recipientId, boolean createIfNotExist) throws IllegalArgumentException {
+        Assert.notNull(senderId, "senderId must not be null");
+        Assert.notNull(recipientId, "recipientId must not be null");
         Optional<String> chatId = getChatId(senderId, recipientId, createIfNotExist);
         if (chatId.isPresent()) {
             return chatRoomRepository.findBySenderIdAndRecipientIdAndType(senderId, recipientId, "Room");
@@ -71,7 +74,12 @@ public class ChatRoomService {
         return Optional.empty();
     }
 
-    public List<ChatRoom> getChatRooms(String senderId) {
+    public List<ChatRoom> getChatRooms(String senderId) throws IllegalArgumentException {
+        Assert.notNull(senderId, "senderId must not be null");
         return chatRoomRepository.findBySenderIdAndType(senderId, "Room");
+    }
+
+    public void deleteChatRoom(String chatRoomId) {
+        chatRoomRepository.deleteByChatId(chatRoomId);
     }
 }

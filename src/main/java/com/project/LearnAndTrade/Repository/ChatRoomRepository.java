@@ -15,6 +15,7 @@ package com.project.LearnAndTrade.Repository;
 
 import com.project.LearnAndTrade.Entity.ChatRoom;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,5 +27,7 @@ public interface ChatRoomRepository extends MongoRepository<ChatRoom, String> {
     Optional<ChatRoom> findBySenderIdAndRecipientIdAndType(String senderId, String recipientId, String type);
 
     List<ChatRoom> findBySenderIdAndType(String senderId, String type);
+
+    void deleteByChatId(String chatId);
 
 }
