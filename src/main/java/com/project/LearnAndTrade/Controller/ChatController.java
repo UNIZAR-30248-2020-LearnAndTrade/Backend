@@ -101,6 +101,24 @@ public class ChatController {
     }
 
     /*
+            This method counts the messages without read in a chat by a "recipientId".
+     */
+    @Operation(
+            summary = "Count non-read messages in a chat",
+            description = "This method counts the messages without read in a chat by a \"recipientId\"",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful non-read message count"),
+                    @ApiResponse(responseCode = "404", description = "Error counting non-read messages"),
+            })
+    @GetMapping(path = "/messages/{recipientId}/count", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> countNewMessages(
+            @Parameter(description = "Recipient ID", required = true) @PathVariable String recipientId
+    ) {
+        return ResponseEntity
+                .ok(chatMessageService.countAnyNewMessages(recipientId));
+    }
+
+    /*
             This method gets the messages in a chat by a "senderId" and a "recipientId".
      */
     @Operation(

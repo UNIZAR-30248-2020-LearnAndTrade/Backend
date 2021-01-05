@@ -57,6 +57,14 @@ public class ChatMessageService {
     }
 
     /*
+        This service counts all the recieved messages in a chat between two users by
+            a "senderId" and a "recipientId".
+     */
+    public long countAnyNewMessages(String recipientId) {
+        return repository.countByRecipientIdAndStatusAndType(recipientId, MessageStatus.RECEIVED, "Message");
+    }
+
+    /*
         This service finds all the messages in a chat between two users by
             a "senderId" and a "recipientId".
      */
