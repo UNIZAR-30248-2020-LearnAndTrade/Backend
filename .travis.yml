@@ -1,8 +1,6 @@
 language: java
 jdk:
   - oraclejdk13
-services:
-  - mongodb
 branches:
   only:
     - main

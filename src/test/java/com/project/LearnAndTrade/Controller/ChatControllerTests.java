@@ -3,19 +3,18 @@ package com.project.LearnAndTrade.Controller;
 import com.project.LearnAndTrade.Entity.ChatMessage;
 import com.project.LearnAndTrade.Entity.ChatRoom;
 import com.project.LearnAndTrade.Entity.MessageStatus;
+import com.project.LearnAndTrade.Exception.ResourceNotFoundException;
 import com.project.LearnAndTrade.Service.ChatMessageService;
 import com.project.LearnAndTrade.Service.ChatRoomService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 import java.util.List;
 
-@AutoConfigureDataMongo
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
