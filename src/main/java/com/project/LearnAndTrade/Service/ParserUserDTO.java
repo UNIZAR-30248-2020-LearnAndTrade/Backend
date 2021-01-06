@@ -45,20 +45,20 @@ public class ParserUserDTO {
             List<Theme> interests = parserThemeDTO.themeDTOToThemeList(userDTO.getInterests());
             List<Theme> knowledges = parserThemeDTO.themeDTOToThemeList(userDTO.getKnowledges());
             if (!interests.isEmpty() && !knowledges.isEmpty()) {
-                return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
+                return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),
                         interests, knowledges, userDTO.getName(), userDTO.getSurname(),
                         userDTO.getBirthDate(), userDTO.getImageUrl()));
             } else {
                 if (userDTO.getInterests().isEmpty() && userDTO.getKnowledges().isEmpty()) {
-                    return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
+                    return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),
                             new ArrayList<>(), new ArrayList<>(), userDTO.getName(), userDTO.getSurname(),
                             userDTO.getBirthDate(), userDTO.getImageUrl()));
                 } else if (userDTO.getInterests().isEmpty()) {
-                    return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
+                    return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),
                             new ArrayList<>(), knowledges, userDTO.getName(), userDTO.getSurname(),
                             userDTO.getBirthDate(), userDTO.getImageUrl()));
                 } else if (userDTO.getKnowledges().isEmpty()) {
-                    return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), oldUser.get().getPassword(),
+                    return Optional.of(new User(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),
                             interests, new ArrayList<>(), userDTO.getName(), userDTO.getSurname(),
                             userDTO.getBirthDate(), userDTO.getImageUrl()));
                 } else {
