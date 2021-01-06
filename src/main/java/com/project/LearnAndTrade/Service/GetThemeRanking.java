@@ -63,6 +63,8 @@ public class GetThemeRanking {
                     RankingEntry entry = new RankingEntry(user.getUsername(), average);
                     ranking.add(entry);
                 }
+                total = 0;
+                reservationsRated = 0;
             }
 
             Collections.sort(ranking);
