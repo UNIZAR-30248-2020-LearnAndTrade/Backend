@@ -48,14 +48,18 @@ public class GetThemeRanking {
             List<Reservation> reservations;
             int total = 0;
             int average = 0;
+            int reservationsRated = 0;
             List<RankingEntry> ranking = new ArrayList<>();
             for (User user : users) {
                 reservations = reservationRepository.findByTeacherUsernameAndTheme(user.getUsername(), themeOptional.get());
                 for (Reservation reservation : reservations) {
-                    total = total + reservation.getRating();
+                    if (reservation.getStudentFinished() && reservation.getTeacherFinished()) {
+                        total = total + reservation.getRating();
+                        reservationsRated++;
+                    }
                 }
                 if (reservations.size() != 0) {
-                    average = total / reservations.size();
+                    average = total / reservationsRated;
                 }
                 RankingEntry entry = new RankingEntry(user.getUsername(), average);
                 ranking.add(entry);
