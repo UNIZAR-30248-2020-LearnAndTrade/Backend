@@ -36,5 +36,5 @@ public interface ReservationRepository extends CrudRepository<Reservation, Strin
                 " OR (r.startTime >= ?4 AND r.finishTime <= ?5))")
     List<Reservation> findByUserAndHours(String usernameTeacher, String usernameStuden, Date date, int startTime, int finishTime);
 
-    List<Reservation> findByTeacherUsernameAndTheme(String teacherUsername, Theme theme);
+    List<Reservation> findByTeacherUsernameOrTheme(String teacherUsername, Theme theme);
 }
